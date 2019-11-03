@@ -28,8 +28,8 @@ class Engine(object):
         Prints the animals name and what sound it makes
     """
 
-    def __init__(self, output_directory='./'):
-        self.test =  True  #False #
+    def __init__(self, output_directory='./', bTest = None):
+        self.test = bTest
         self.capacity_losses = {'Bridge': {0: 0, 1: .5, 2: 1, 3: 1}, 'Road': {
             0: 0, 1: .7, 2: 1, 3: 1}, 'Tunnel': {0: 0}}
 
