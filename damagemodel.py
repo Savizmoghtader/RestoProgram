@@ -31,6 +31,11 @@ from collections import Counter
 
 class DamageModel(object):
     """Damage model for the network
+
+
+     ----------
+    TODO:Needed input Data:
+
     """
 
     def __init__(self, graph,capacity_losses):
@@ -75,7 +80,7 @@ class DamageModel(object):
     def get_graph(self):
         return self.G
 
-    def get_damage_dict(self,directed=False):
+    def get_damage_dict(self,directed=None):
         if directed:
             return self.damage_dict
         else:

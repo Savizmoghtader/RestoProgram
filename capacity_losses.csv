@@ -1,0 +1,8 @@
+Objects,Damage_Level,Capacity_Loss
+Bridge,0,0
+Bridge,1,0.5
+Bridge,2,1
+Road,0,0
+Road,1,0.7
+Road,2,1
+Tunnel,0,0

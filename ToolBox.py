@@ -5,10 +5,10 @@ import copy
 import numpy as np
 
 
-
 def get_delta(t_0, t_1):
     delta = [t_1[i]-t_0[i] for i in range(len(t_0))]
     return delta
+
 
 def parallel_model(graph, od_graph, od_matrix):
     g = graph.copy()
@@ -21,8 +21,6 @@ def parallel_model(graph, od_graph, od_matrix):
     distances = sum(traffic.get_car_distances())
     lost_trips = sum(traffic.get_lost_trips().values())
     return t_k, flow, hours, distances, lost_trips
-
-
 
 
 def merge_dicts(dict_args):
@@ -48,8 +46,7 @@ def sort_dic(d):
         for i in range(1,c[j]+1):
             e.append(j+str(i))
         t.append(e)
-
-    return(t)
+    return t
 
 def get_edge_attribute(graph,edge,attribute):
     try:

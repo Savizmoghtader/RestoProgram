@@ -35,54 +35,6 @@ from shutil import rmtree
 
 WINDOWS = True
 
-class TrafficSimulation(object):
-    def __init__(self, graph=None, od_graph=None):
-
-        self.graph = graph
-        self.od_graph = od_graph
-        self.print_flag = True
-        self.unit_factor = 1000
-        pass
-
-    def get_edge_attribute(self, edge, attribute):
-        return self.graph[edge[0]][edge[1]][attribute]
-
-    def set_edge_attribute(self, edge, attribute, value):
-        self.graph[edge[0]][edge[1]][attribute] = value
-        pass
-
-    def calculate_initial_traveltime(self):
-        for edge in self.graph.edges():
-            initial_traveltime = self.get_edge_attribute(
-                edge, 'length') / self.unit_factor / self.get_edge_attribute(edge, 'speedlimit')
-            self.set_edge_attribute(edge, 't_0', initial_traveltime)
-        pass
-
-    def set_initial_traveltimes(self):
-        for edge in self.graph.edges():
-            self.set_edge_attribute(
-                edge, 't_k', self.get_edge_attribute(edge, 't_0'))
-            self.set_edge_attribute(edge, 't_h', 0)
-        pass
-
-    def set_initial_flow(self):
-        for edge in self.graph.edges():
-            self.set_edge_attribute(edge, 'flow', 0)
-        pass
-
-    def set_initial_help_flow(self):
-        for edge in self.graph.edges():
-            self.set_edge_attribute(edge, 'help_flow', 0)
-        pass
-
-    def set_od_matix(self, od_matrix):
-        for edge in self.od_graph.edges():
-            s = edge[0]
-            t = edge[1]
-            self.od_graph[s][t]['demand'] = od_matrix[s, t]
-        pass
-
-
 class TrafficModel(object):
     def __init__(self, graph, od_graph, od_matrix=None):
         self.graph = graph.copy()
@@ -277,63 +229,7 @@ class TrafficModel(object):
         rmtree(self.temp_dir)
         pass
 
-# import timeit
 
-# def test():
-#     print('***** start *****')
-#     start = timeit.default_timer()
-
-#     ### Initialization of the graphs ###
-
-#     # road graph
-#     road_graph = read_shp('./data/road_simple.shp')
-#     #road_graph = read_shp('./temp/roads.shp')
-#     #road_graph = read_shp('./temp/roads_damaged.shp')
-
-#     # od graph (without external od matrix)
-#     od_graph = create_od_graph('./data/centroids.shp')
-#     #od_graph = create_od_graph('./temp/centroids.shp')
-
-#     # load connections from od nodes to road network
-#     con_edges = read_shp('./data/connections.shp')
-#     #con_edges = read_shp('./temp/connections.shp')
-
-#     # create network for traffic model
-#     graph = create_network_graph(road_graph,od_graph,con_edges)
-
-#     ## Traffic Model ##
-
-#     # load given od matix
-#     od_matrix = np.genfromtxt('./data/od_0.csv', delimiter=',')
-#     #od_matrix = np.genfromtxt('./temp/od.csv', delimiter=',')
-
-#     ### REMARK ###
-#     # Final flow results has to be multiplied wit 0.46
-#     # for a hourly analysis and with 10.9 for a daily analysis !!!
-
-#     start_run = timeit.default_timer()
-#     # set up traffic model
-#     traffic = TrafficModel(graph,od_graph,od_matrix)
-
-#     # run traffic simulation
-#     traffic.run()
-
-#     # get the new graph of roads
-#     #graph_result = traffic.get_graph()
-
-#     print(sum(traffic.get_traveltime()))
-#     print(sum(traffic.get_flow()))
-#     print(sum(traffic.get_car_hours()))
-#     print(sum(traffic.get_car_distances()))
-
-#     end_run = timeit.default_timer()
-
-#     print('run time: ' + str(end_run - start_run))
-#     stop = timeit.default_timer()
-#     print('total time: ' + str(stop - start))
-#     print('****** end ******')
-
-# test()
 
 # =============================================================================
 # eof

@@ -21,7 +21,7 @@ class SimAnnealInterface(Annealer):
         capacity_losses : dict
             this includes ???
 
-        Methods
+        Methods/Functions
         -------
         says(sound=None)
             Prints the animals name and what sound it makes
