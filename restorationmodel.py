@@ -71,7 +71,6 @@ class RestorationModel(object):
         pass
 
     def get_enhanced_sequence(self):
-        graph = self.graph.copy()
         sequence = self.sequence
 
         # add additional information to sequence
