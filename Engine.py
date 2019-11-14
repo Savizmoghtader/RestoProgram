@@ -7,6 +7,7 @@ from SimAnneal_Interface import SimAnnealInterface
 import random
 import ast
 import csv
+import os
 
 class Engine(object):
 
@@ -18,7 +19,7 @@ class Engine(object):
     ----------
 
         csv file for restoration names (levels)
-        csv file for  capacity losses of objects with respect to each damage level.
+        csv file for capacity losses of objects with respect to each damage level.
         csv file containing the od matrix
         shape files containing the object IDs and their related length, width (determined from the object class),
         flow direction (one way: true or false), capacity, speed limit and damage level.
@@ -105,9 +106,11 @@ class Engine(object):
         for row in reader:
             self.restoration_names[int(row[0])] = (row[1])
 
-        self.restoration_types = list(self.restoration_names.keys()) #TODO: check with Juergen to make sure it is not the scenarios
+        self.restoration_types = list(self.restoration_names.keys()) #TODO: check to make sure
         self.restoration_constraint = bRestConstraint
         self.output_directory = output_directory
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory)
 
     def initialize_network(self):
 
@@ -143,7 +146,7 @@ class Engine(object):
         """
          Runs the DamageModel class on "damage" object and creates the damage dictionary (self.damage_dict)
             TODO: Define whether get_damage_dict is directed or not, meaning ...and some elaboration on the process,
-            Does this directed nodes for edges?
+            Does this refer to directed nodes for edges?
 
         Input parameters:
         ----------
@@ -204,7 +207,7 @@ class Engine(object):
         This function is used to run the Engine class (optimization of the restoration programs) on the object named
         model that was constructed from the Engine class.
 
-        This is the main function of the Engine class that includes the following methods, parameters, and classes:
+        This is the main function of the Engine class that includes the following methods, and classes:
 
             methods:
             -------
@@ -217,13 +220,14 @@ class Engine(object):
         Class:
         SimAnnealInterface(init_state, self.graph, self.od_graph,self.od_matrix, self.graph_damaged, damage,
         self.output_directory)
+        TODO: write more info here for SA
 
         """
         self.initialize_network()
         self.initialize_damage()
         init_state = self.initialize_state()
 
-        # getting t_k, flow, hours, distances, lost_trips by running the traffic model with before damage
+        # getting t_k, flow, hours, distances, lost_trips by running the traffic model before damage
         no_damage = self.run_traffic_model(self.graph, self.od_graph)
 
         # getting t_k, flow, hours, distances, lost_trips by running the traffic model after damage

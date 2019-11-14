@@ -1,194 +1,94 @@
-#!/usr/bin/python -tt
-# -*- coding: utf-8 -*-
-# =============================================================================
-# File      : main.py
-# Creation  : 11 Mar 2016
-# Time-stamp: <Mit 2019-10-23 20:25 juergen>
-#
-# Copyright (c) 2016 Jürgen Hackl <hackl@ibi.baug.ethz.ch>
-#               http://www.ibi.ethz.ch
-# $Id$
-#
-# Description : main file
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-# =============================================================================
-
 import os
-import networkx as nx
-import numpy as np
-import random
-import pickle
 import ast
-import itertools
-
-from operator import itemgetter
-
-#from setup_network import TestNetwork
-
-from damagemodel import DamageModel
-from restorationmodel import RestorationModel
+import csv
 
 from traffic_fw.trafficmodel import TrafficModel
+from operator import itemgetter
+from damagemodel import DamageModel
+from restorationmodel import RestorationModel
 from traffic_fw.initialize import *
-from traffic_fw.graph2shp import write_shp
-#from graph2shp import save_shp
-from simanneal import Annealer
-
 from joblib import Parallel, delayed
-
-import timeit
-from util import *
+from ToolBox import *
 
 
-class Engine(object):
-    """ Simulation engine
+class PpEngine(object):
+    """ Postprocessing Simulation Engine
     """
 
-    def __init__(self, filepath='./'):
+    def __init__(self, filepath='./', bTest = None):
+
         self.filepath = filepath
-        self.test = False  # True#False#True
+        self.test = bTest
+
+        # TODO: What are these I do not think they are needed!
         self.a = 25.5
         self.b = 10
         self.c = 1240
 
-        self.mu = np.array([0.94, 0.06])
-        self.xi = np.array([23.02, 130.96])
-
-        self.F_w = np.array([6.7, 33])/100
-        self.nu = 1.88
-        self.rho = np.array([14.39, 32.54])/100
-        self.upsilon = 83.27 * 8
+        self.mu = np.array([0.94, 0.06]) # % of distribution of cars vs. trucks
+        self.xi = np.array([23.02, 130.96]) # value of travel for cars vs. trucks
+        self.F_w = np.array([6.7, 33])/100 # mean fuel consumption for cars vs. trucks
+        self.nu = 1.88 # mean fuel price
+        self.rho = np.array([14.39, 32.54])/100 # Operating costs (without fuel) for cars vs. trucks/ 100 km
+        self.upsilon = 83.27 * 8 # hourly wage [when lost or delayed trips]* 8 hours/day
+        # factor to find the area under the trip distribution curve(average value*9= total trips per day for a zone)
         self.day_factor = 9
-        self.capacity_losses = {'Bridge': {0: 0, 1: .5, 2: 1, 3: 1}, 'Road': {
-            0: 0, 1: .7, 2: 1, 3: 1}, 'Tunnel': {0: 0}}
+        self.gamma = 1 # weight factor for indirect costs
 
-        self.gamma = 1
+        # self.capacity_losses = {'Bridge': {0: 0, 1: .5, 2: 1, 3: 1}, 'Road': {
+        #     0: 0, 1: .7, 2: 1, 3: 1}, 'Tunnel': {0: 0}}
+        self.capacity_losses = {}
+        data = csv.DictReader(open("capacity_losses.csv", 'r'), delimiter=",")
+        for row in data:
+            item = self.capacity_losses.get(row["Objects"], dict())
+            item[int(row["Damage_Level"])] = float(row["Capacity_Loss"])
+            self.capacity_losses[row["Objects"]] = item
+
+        # TODO: Load data from csv file: Done but needs confirmation
         # type 1: normal
         # type 2: emergency
         # type 3: partial
-        # TODO: Load data from csv file
-        self.restoration_names = {
-            0: 'high priority', 1: 'normal', 2: 'low priority'}
-        self.restoration_types = [0, 1, 2]
-        # self.restoration_types = [2,2,2]
+        # self.restoration_names = {0: 'high priority', 1: 'normal', 2: 'low priority'}
+        self.restoration_names = {}
+        reader = csv.reader(open('./restoration_names.csv'))
+        for row in reader:
+            self.restoration_names[int(row[0])] = (row[1])
 
-    def create_network(self):
-        self.network = TestNetwork()
-        self.network.test()
-        pass
+        # self.restoration_types = [0, 1, 2]
+        # # self.restoration_types = [2,2,2]
+        self.restoration_types = list(self.restoration_names.keys())  # TODO: check to make sure
+
 
     def initialize_network(self):
+
         if self.test:
-            self.road_graph = read_shp('./temp/roads.shp')
-            self.od_graph = create_od_graph('./temp/centroids.shp')
-            self.con_edges = read_shp('./temp/connections.shp')
-            self.od_matrix = np.genfromtxt('./temp/od.csv', delimiter=',')
+            self.road_graph = read_shp('./test_data/roads.shp')
+            self.od_graph = create_od_graph('./test_data/centroids.shp')
+            self.con_edges = read_shp('./test_data/connections.shp')
+            self.od_matrix = np.genfromtxt('./test_data/od.csv', delimiter=',')
         else:
-            # self.road_graph = read_shp('./data/roads_dir.shp')
             self.road_graph = read_shp('./data/roads_clean.shp')
             self.od_graph = create_od_graph('./data/centroids.shp')
             self.con_edges = read_shp('./data/connections.shp')
             self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
 
-        self.graph = create_network_graph(
-            self.road_graph, self.od_graph, self.con_edges)
+        self.graph = create_network_graph(self.road_graph, self.od_graph, self.con_edges)
         pass
+
 
     def initialize_damage(self):
         self.damage = DamageModel(self.graph, self.capacity_losses)
         self.damage.run()
         self.graph_damaged = self.damage.get_graph()
         self.damage_dict = self.damage.get_damage_dict(directed=False)
-        #self.damage_dict = self.damage.get_damage_dict(directed=True)
         pass
 
-    def run_restoration_model(self, sequence=None):
-        self.restoration = RestorationModel(self.graph_damaged, self.filepath)
-        self.restoration.run(sequence)
-        self.restoration_graphs = self.restoration.get_restoration_graphs()
-        self.restoration_times = self.restoration.get_restoration_times()
-        self.restoration_costs = self.restoration.get_restoration_costs()
-        pass
-
-    def run_traffic_model(self, graph, od_graph):
-        # set up traffic model
-        #self.traffic = TrafficModel(graph.to_undirected(),od_graph.to_undirected(),self.od_matrix)
-        self.traffic = TrafficModel(graph, od_graph, self.od_matrix)
-        # run traffic simulation
-        self.traffic.run()
-        # self.traffic.print_results()
-        t_k = sum(self.traffic.get_traveltime())
-        flow = sum(self.traffic.get_flow())
-        hours = sum(self.traffic.get_car_hours())
-        distances = sum(self.traffic.get_car_distances())
-        lost_trips = sum(self.traffic.get_lost_trips().values())
-        # graph_result = self.traffic.get_graph()
-        return t_k, flow, hours, distances, lost_trips
-
-    # def save_results(self,path_shp):
-    #     save_shp(self.graph_result,path_shp)
-    #     pass
-
-    def initialize_state(self):
-        init_edges = list(self.damage_dict.keys())
-        random.shuffle(init_edges)
-
-        init_state = []
-        # ran_seq = [0,1,2,2]
-        # for i,edge in enumerate(init_edges):
-        #     init_state.append((edge,ran_seq[i]))
-
-        for edge in init_edges:
-            init_state.append((edge, random.choice(self.restoration_types)))
-        #    #     init_state.append((edge,0))
-        return init_state
-
-    # def parallel_model(self,graph):
-    #     g = graph.copy()
-    #     od_graph = self.od_graph.copy()
-    #     damaged = self.run_traffic_model(g,od_graph)
-    #     return get_delta(default,damaged)
-
-    def test_run_restoration(self):
-        print('--- initialization ---')
-        self.create_network()
-        self.initialize_network()
-        self.initialize_damage()
-        #init_state = self.initialize_state()
-        init_state = [(((757191.29, 190611.49), (757051.9, 190757.8)), 2), (((759564.7, 193863.6), (759486.2, 193874.4)), 0), (((750173.5, 187788.7), (750254.0, 187818.8)), 1), (((760072.86, 195139.91), (760316.99, 195480.22)), 2), (((750029.5, 187527.68), (750111.3, 187316.8)), 2), (((758869.98, 192919.98), (759283.67, 193198.51)), 2), (((759486.67, 194199.2), (759684.8, 194851.49)), 2), (((750418.28, 187694.49), (750372.0, 187763.7)), 2), (((750758.67, 185809.8), (750687.71, 185933.99)), 2), (((750205.1, 187513.1), (750274.52, 187591.83)), 2), (((759199.86, 192428.21), (759496.12, 193153.65)), 2), (((750892.8, 188259.0), (750846.7, 188266.5)), 2), (((761299.9, 197672.1), (760157.04, 195601.1)), 2), (((757295.4, 191208.2), (756999.6, 191494.5)), 2), ((
-            (750274.52, 187591.83), (750970.7, 188290.6)), 2), (((750846.7, 188266.5), (750720.3, 188285.3)), 2), (((759684.8, 194851.49), (759921.1, 195903.9)), 2), (((757048.2, 190761.8), (756692.3, 191010.4)), 2), (((759276.93, 193205.89), (758864.56, 192928.38)), 2), (((757051.9, 190757.8), (757384.9, 191117.0)), 2), (((756566.83, 191085.62), (757125.6, 191859.3)), 2), (((760146.99, 195565.56), (760061.78, 195228.28)), 2), (((750205.1, 187513.1), (750032.6, 187537.7)), 2), (((760653.9, 196792.7), (761122.2, 197363.1)), 2), (((756566.7, 190985.3), (756566.83, 191085.62)), 2), (((756263.0, 190580.5), (756566.7, 190985.3)), 2), (((750183.5, 187097.9), (750024.54, 187597.17)), 2), (((757295.4, 191208.2), (757357.01, 191276.99)), 2), (((760395.1, 196965.5), (760902.2, 197368.6)), 2)]
-        print('--- restoration ---')
-        self.run_restoration_model(init_state)
-
-        print(self.restoration_times)
-        pass
 
     def load_state(self, filename):
         with open(filename, 'r') as f:
             state = ast.literal_eval(f.read())
         return state
 
-    def load_damage(self, filename):
-        with open(filename, 'r') as f:
-            damaged = ast.literal_eval(f.read())
-        return damaged
-
-    def load_costs(self, filename):
-        with open(filename, 'r') as f:
-            costs = ast.literal_eval(f.read())
-        return costs
 
     def calculate_damage(self):
         print('--- initialization ---')
@@ -199,7 +99,6 @@ class Engine(object):
         init_state = self.load_state(self.filepath + 'state.txt')
 
         print('--- no and initial damage ---')
-
         no_damage = self.run_traffic_model(self.graph, self.od_graph)
         initial_damage = self.run_traffic_model(
             self.graph_damaged.copy(), self.od_graph.copy())
@@ -219,8 +118,37 @@ class Engine(object):
 
         with open(self.filepath + 'damaged.txt', 'w') as f:
             f.write(str(self.damaged))
-
         pass
+
+    def run_traffic_model(self, graph, od_graph):
+        self.traffic = TrafficModel(graph, od_graph, self.od_matrix)
+        self.traffic.run()
+        # self.traffic.print_results()
+        t_k = sum(self.traffic.get_traveltime())
+        flow = sum(self.traffic.get_flow())
+        hours = sum(self.traffic.get_car_hours())
+        distances = sum(self.traffic.get_car_distances())
+        lost_trips = sum(self.traffic.get_lost_trips().values())
+        # graph_result = self.traffic.get_graph()
+        return t_k, flow, hours, distances, lost_trips
+
+    def run_restoration_model(self, sequence=None):
+        self.restoration = RestorationModel(self.graph_damaged, self.filepath)
+        self.restoration.run(sequence)
+        self.restoration_graphs = self.restoration.get_restoration_graphs()
+        self.restoration_times = self.restoration.get_restoration_times()
+        self.restoration_costs = self.restoration.get_restoration_costs()
+        pass
+
+    def load_damage(self, filename):
+        with open(filename, 'r') as f:
+            damaged = ast.literal_eval(f.read())
+        return damaged
+
+    def load_costs(self, filename):
+        with open(filename, 'r') as f:
+            costs = ast.literal_eval(f.read())
+        return costs
 
     def run(self, scenario):
         print('--- initialization ---')
@@ -242,7 +170,7 @@ class Engine(object):
 
         self.restoration_results = RestorationModel(
             self.graph_damaged, self.filepath)
-        # (object,schedule time,needed time,#resources,intervention type, assignd resource)
+        # (object,schedule time,needed time,#resources,intervention type, assigned resource)
         sequence_formated = self.restoration_results.format(init_state)
 
         sort_names = []
@@ -262,12 +190,17 @@ class Engine(object):
         for name, key in enumerate(sort_names):
             name_dict[key[2]] = str(name+1)
 
-#        print(name_dict)
-        name_dict = {'1095': '6', '460': '10', '1703': '14', '1237': '20', '562': '11', '2069': '12', '1798': '24', '471': '28', '1371': '29', '1692': '15', '2043': '26', '1802': '8', '1907': '18', '1233': '23',
-                     '1913': '13', '2042': '1', '2052': '7', '2131': '17', '554': '2', '1276': '21', '1202': '22', '1706': '9', '1803': '5', '1905': '19', '1279': '16', '1814': '25', '332': '3', '1498': '27', '461': '4'}
+        print(name_dict)
+
+        #name_dict = {'b-d': '1', ':a-g': '2', 'd-g': '3', 'd-e': '4'}
+        # Keys: Object ID , Values: Nr in the table (8) of the paper
+        # name_dict = {'1095': '6', '460': '10', '1703': '14', '1237': '20', '562': '11', '2069': '12', '1798': '24', '471': '28', '1371': '29', '1692': '15', '2043': '26', '1802': '8', '1907': '18', '1233': '23',
+        #               '1913': '13', '2042': '1', '2052': '7', '2131': '17', '554': '2', '1276': '21', '1202': '22', '1706': '9', '1803': '5', '1905': '19', '1279': '16', '1814': '25', '332': '3', '1498': '27', '461': '4'}
+
         i = 0
         lines = []
 
+        # TODO : is this  extra? I do not find any other places it is used
         name_list = []
         for s in sequence_formated:
             for t in s:
@@ -342,14 +275,22 @@ class Engine(object):
 
         program.append(['', '', '', '', '', '', '', '', '',
                         sum_fixed, sum_variable, sum_resources, sum_total])
+
+
+        if not os.path.exists(self.filepath + 'tex/'):
+            os.makedirs(self.filepath + 'tex/')
+            print("Path is created")
+
+
         with open(self.filepath + 'tex/program_0'+scenario+'.tex', mode='wt', encoding='utf-8') as f:
             for p in program:
                 for i in range(9, 13):
                     p[i] = '\\numprint{'+str(p[i])+'}'
                 f.write(' & '.join(str(e) for e in p)+' \\\ \n')
 
-        with open('./results/tex/resources_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
-            myfile.write('\n'.join(lines))
+        # TODO: I commented this part to avoid double results *check again for other figures
+        # with open(self.filepath + 'tex/resources_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
+        #     myfile.write('\n'.join(lines))
 
         with open(self.filepath + 'tex/resources_01.tex', mode='wt', encoding='utf-8') as myfile:
             myfile.write('\n'.join(lines))
@@ -357,6 +298,7 @@ class Engine(object):
         #print('t_k, flow, hours, distances, lost_trips')
         # for damage in damaged:
         #     print(damage)
+        # TODO: What are these I do not think they are needed!
         fix_costs = [0]
         variable_costs = [0]
         resources_costs = [0]
@@ -365,7 +307,7 @@ class Engine(object):
 
         self.run_restoration_model(init_state)
 
-#        print(self.restoration_costs)
+        #print(self.restoration_costs)
 
         # print(self.damaged)
         result_matrix = np.zeros((9, len(self.damaged)+1))
@@ -377,18 +319,15 @@ class Engine(object):
             if idx == 0:
                 delta_t = self.restoration_times[idx]
             else:
-                delta_t = (
-                    self.restoration_times[idx]-self.restoration_times[idx-1])
+                delta_t = (self.restoration_times[idx]-self.restoration_times[idx-1])
 
             result_matrix[0][idx+1] = self.restoration_costs[idx][0]
             result_matrix[1][idx+1] = self.restoration_costs[idx][1]
             result_matrix[2][idx+1] = self.restoration_costs[idx][2]
 
-            result_matrix[4][idx+1] = (damage[2] *
-                                       np.sum(self.mu*self.xi))*delta_t * self.day_factor
-            result_matrix[5][idx+1] = (damage[3] * np.sum(self.mu *
-                                                          (self.nu * self.F_w + self.rho)))*delta_t
-            result_matrix[6][idx+1] = (damage[4] * self.upsilon)*delta_t
+            result_matrix[4][idx+1] = (damage[2] * np.sum(self.mu * self.xi)) * delta_t * self.day_factor
+            result_matrix[5][idx+1] = (damage[3] * np.sum(self.mu * (self.nu * self.F_w + self.rho))) * delta_t
+            result_matrix[6][idx+1] = (damage[4] * self.upsilon) * delta_t
 
             result_matrix_t[0][idx+1] = damage[2]
             result_matrix_t[1][idx+1] = damage[3]
@@ -424,8 +363,7 @@ class Engine(object):
 
         lines = []
         for i in range(4):
-            lines.append(
-                '\\addplot+[const plot, no marks, thick] coordinates {')
+            lines.append('\\addplot+[const plot, no marks, thick] coordinates {')
             for j in range(result_matrix.shape[1]):
                 lines.append('('+str(x[j])+','+str(result_matrix[i, j])+')')
             lines.append('};')
@@ -435,14 +373,15 @@ class Engine(object):
             y = result_matrix[i]
             yinterp = np.interp(xvals, x, y)
 
-            lines.append(
-                '\\addplot+[const plot, no marks, thick] coordinates {')
+            lines.append('\\addplot+[const plot, no marks, thick] coordinates {')
             for j in range(xvals.shape[0]):
                 lines.append('('+str(xvals[j])+','+str(yinterp[j])+')')
             lines.append('};')
 
-        with open('./results/tex/costs_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
-            myfile.write('\n'.join(lines))
+        # TODO: I commented this part to avoid double results *check again for other figures
+
+        # with open(self.filepath + 'tex/costs_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
+        #     myfile.write('\n'.join(lines))
 
         with open(self.filepath + 'tex/costs_01.tex', mode='wt', encoding='utf-8') as myfile:
             myfile.write('\n'.join(lines))
@@ -480,8 +419,10 @@ class Engine(object):
                 lines.append('('+str(xvals[j])+','+str(vec[j])+')')
             lines.append('};')
 
-        with open('./results/tex/sum_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
-            myfile.write('\n'.join(lines))
+        # TODO: I commented this part to avoid double results *check again for other figures
+
+        # with open(self.filepath + 'tex/sum_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
+        #     myfile.write('\n'.join(lines))
 
         with open(self.filepath + 'tex/sum_01.tex', mode='wt', encoding='utf-8') as myfile:
             myfile.write('\n'.join(lines))
@@ -508,13 +449,15 @@ class Engine(object):
                 lines.append('('+str(x[j])+','+str(mat[i, j])+')')
             lines.append('};')
 
-        with open('./results/tex/los_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
-            myfile.write('\n'.join(lines))
+        # TODO: I commented this part to avoid double results *check again for other figures
+        # with open(self.filepath + 'tex/los_0'+scenario+'.tex', mode='wt', encoding='utf-8') as myfile:
+        #     myfile.write('\n'.join(lines))
 
         with open(self.filepath + 'tex/los_01.tex', mode='wt', encoding='utf-8') as myfile:
             myfile.write('\n'.join(lines))
 
         pass
+
 
 
 def get_delta(t_0, t_1):
@@ -533,25 +476,3 @@ def parallel_model(graph, od_graph, od_matrix):
     distances = sum(traffic.get_car_distances())
     lost_trips = sum(traffic.get_lost_trips().values())
     return t_k, flow, hours, distances, lost_trips
-
-# if __name__ == '__main__':
-
-
-def main():
-    print('***** start *****')
-    start = timeit.default_timer()
-    model = Engine('./results/test/')
-    model.run('99')
-    os.system('cd ./results/test/tex/ && pdflatex fig.tex')
-    stop = timeit.default_timer()
-    print('time: ' + str(stop - start))
-    print('****** end ******')
-
-
-main()
-# =============================================================================
-# eof
-#
-# Local Variables:
-# mode: python
-# End:

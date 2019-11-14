@@ -11,20 +11,17 @@ import random
 class SimAnnealInterface(Annealer):
     """
         Interface to use simaneal package and its classes
-
         ...
+            Attributes/Parameters
+            ----------
+                test : bool
+                    a variable to define if the model runs on test data or original data
+                capacity_losses : dict
+                    this includes ???
 
-        Attributes/Parameters
-        ----------
-        test : bool
-            a variable to define if the model runs on test data or original data
-        capacity_losses : dict
-            this includes ???
+                Methods/Functions
+            -------
 
-        Methods/Functions
-        -------
-        says(sound=None)
-            Prints the animals name and what sound it makes
         """
 
     def __init__(self, state, graph, od_graph, od_matrix, graph_damaged, damage, fdir):

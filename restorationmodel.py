@@ -53,9 +53,9 @@ class RestorationModel(object):
         self.max_available_resources = 3
 
         # TODO make this nicer
-        #self.resources_constrains = [[(0,1),(4,5)],[(0,1)]]
-        self.resources_constrains = [[], [], []]
-#        self.resources_constrains = [[],[(0,7)],[(20,29)]]
+        #self.resources_constrains = [[], [(0, 7)], [(20, 29)]] # Scenario 1 and 2
+        self.resources_constrains = [[], [], []] # Scenario 3
+#
 
         # TODO: Load data from csv file
         self.object_types = {'Bridge': 0, 'Road': 1}
