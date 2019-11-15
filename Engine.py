@@ -169,15 +169,15 @@ class Engine(object):
     def initialize_state(self):
 
         """
-        This function randomly selects objects and is used as an input to the SimAnnealInterface.
+        This function randomly selects objects and returns init_state (to be used as an input to the SimAnnealInterface.)
         """
 
-        init_edges = list(self.damage_dict.keys())
+        init_edges = list(self.damage_dict.keys()) # gets the edges of damaged objects
         random.shuffle(init_edges)
 
         init_state = []
         for edge in init_edges:
-            if self.restoration_constraint:
+            if self.restoration_constraint:  # TODO we are assigning high priority restoration to all damaged edges ? why?
                 init_state.append((edge, 0))
             else:
                 init_state.append((edge, random.choice(self.restoration_types)))
@@ -204,8 +204,8 @@ class Engine(object):
     def run(self):
 
         """
-        This function is used to run the Engine class (optimization of the restoration programs) on the object named
-        model that was constructed from the Engine class.
+        This function is used to run the Engine class (optimization of the restoration programs) on the object
+        that was constructed from the Engine class.
 
         This is the main function of the Engine class that includes the following methods, and classes:
 

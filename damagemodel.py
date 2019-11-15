@@ -30,12 +30,26 @@ import operator
 from collections import Counter
 
 class DamageModel(object):
-    """Damage model for the network
+    """
+    Damage model for the network.
+    The class has the following methods:
 
+        __init__(self, graph,capacity_losses):
+            The input parameters:
+                graph: A  directed graph of the network.
+                capacity_losses
 
-     ----------
-    TODO:Needed input Data:
+        run()
+            This method creates a copy of the graph and sets the non-damaged edges to 0 and
+            unassigned objetcs to type 'Road' and uses the capacity_losses values attributed to each
+            damage condition and calculates the new capacities.
+            In the end creates a dictionary for the damaged edges.
 
+        get_graph()
+            returns self.G
+
+        get_damage_dict()
+            returns the damage dictionary as damage_dict
     """
 
     def __init__(self, graph,capacity_losses):
@@ -61,6 +75,7 @@ class DamageModel(object):
 
             # change capacity
             initial = get_edge_attribute(self.G,edge,'capacity')
+            # round(number, digits), digits: The number of decimals to use when rounding the number. Default is 0
             new = int(round(initial * (1 - self.capacity_losses[object][damage]),0))
             if new == 0:
                 new = 1
@@ -73,7 +88,7 @@ class DamageModel(object):
             set_edge_attribute(self.G,edge,'res_cost',0)
             set_edge_attribute(self.G,edge,'res_type',0)
 
-            # collect damaged edges and
+            # collect damaged edges and if oneway is true/false. Example:{((x1,y1),(x2,y2)): ['name' , 0]}
             if damage > 0:
                 self.damage_dict[edge] = [get_edge_attribute(self.G,edge,'name'),get_edge_attribute(self.G,edge,'oneway')]
 
@@ -102,8 +117,6 @@ class DamageModel(object):
                 else:
                     damage_dict[key] = self.damage_dict[key]
             return damage_dict
-
-
 
 # =============================================================================
 # eof
