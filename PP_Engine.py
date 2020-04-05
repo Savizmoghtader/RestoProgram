@@ -21,16 +21,18 @@ class PpEngine(object):
         self.test = bTest
 
         # TODO: What are these I do not think they are needed!
-        self.a = 25.5
-        self.b = 10
-        self.c = 1240
+        # self.a = 25.5
+        # self.b = 10
+        # self.c = 1240
 
-        self.mu = np.array([0.94, 0.06]) # % of distribution of cars vs. trucks
-        self.xi = np.array([23.02, 130.96]) # value of travel for cars vs. trucks
-        self.F_w = np.array([6.7, 33])/100 # mean fuel consumption for cars vs. trucks
-        self.nu = 1.88 # mean fuel price
-        self.rho = np.array([14.39, 32.54])/100 # Operating costs (without fuel) for cars vs. trucks/ 100 km
-        self.upsilon = 83.27 * 8 # hourly wage [when lost or delayed trips]* 8 hours/day
+        self.mu = np.array([0.94, 0.06])                    # % of distribution of cars vs. trucks
+        self.xi = np.array([23.02, 130.96])                 # value of travel for cars vs. trucks
+        self.F_w = np.array([6.7, 33])/100                  # mean fuel consumption for cars vs. trucks/100 km
+        self.nu = 1.88                                      # mean fuel price
+        self.rho = np.array([14.39, 32.54])/100             # Operating costs (without fuel) for cars vs. trucks/100 km
+        self.upsilon = 83.27 * 8                            # hourly wage [when lost or delayed trips]* 8 hours/day
+
+
         # factor to find the area under the trip distribution curve(average value*9= total trips per day for a zone)
         self.day_factor = 9
         self.gamma = 1 # weight factor for indirect costs
@@ -54,8 +56,7 @@ class PpEngine(object):
         for row in reader:
             self.restoration_names[int(row[0])] = (row[1])
 
-        # self.restoration_types = [0, 1, 2]
-        # # self.restoration_types = [2,2,2]
+
         self.restoration_types = list(self.restoration_names.keys())  # TODO: check to make sure
 
 
@@ -67,10 +68,15 @@ class PpEngine(object):
             self.con_edges = read_shp('./test_data/connections.shp')
             self.od_matrix = np.genfromtxt('./test_data/od.csv', delimiter=',')
         else:
-            self.road_graph = read_shp('./data/roads_clean.shp')
-            self.od_graph = create_od_graph('./data/centroids.shp')
-            self.con_edges = read_shp('./data/connections.shp')
-            self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
+            # self.road_graph = read_shp('./data/roads_clean.shp')
+            # self.od_graph = create_od_graph('./data/centroids.shp')
+            # self.con_edges = read_shp('./data/connections.shp')
+            # self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
+
+            self.road_graph = read_shp('./data_Newversion/critical_objs_removed.shp')
+            self.od_graph = create_od_graph('./data_Newversion/centroids.shp')
+            self.con_edges = read_shp('./data_Newversion/connections.shp')
+            self.od_matrix = np.genfromtxt('./data_Newversion/od.csv', delimiter=',')
 
         self.graph = create_network_graph(self.road_graph, self.od_graph, self.con_edges)
         pass

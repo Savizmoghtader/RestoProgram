@@ -28,14 +28,27 @@
 from ToolBox import *
 import random
 import numpy as np
+import csv
 
 import copy
 from itertools import groupby
 from operator import itemgetter
 
 
+
 class RestorationModel(object):
-    """Restoration model for the network
+    """Restoration model for the network. This class has the following methods:
+
+        __init__
+        get_enhanced_sequence
+        repair
+        run
+        get_restoration_graphs
+        get_restoration_times
+        get_restoration_costs
+        get_damage_dict
+        format
+
     """
 
     def __init__(self, graph, filepath=None):
@@ -44,23 +57,40 @@ class RestorationModel(object):
         self.graph = graph
         self.damage_dict = {}
 
+        # loads the intervention costs for different damage levels of different objects from the selected directory.
         self.interventions = np.loadtxt('./data/interventions.txt')
         self.interventions = self.interventions.reshape((2, 2, 3, 6))
 
+        # For this problem the array shape is for intervention file is: (2, 2, 3, 6)
+        # The elements refers to (from left to right):
+        # 2 object types: bridge and road
+        # 2 Damage levels : minor and major
+        # 3 Levels of intervention
+        # 6 Parameters (LOS recovery, Duration, # of resources, Fixed costs, Variable costs, Resource costs)
         self.working_hours = 8
         # working day / duration_subdivision #smallest time unit in relation to one working day
         self.duration_subdivision = 2
         self.max_available_resources = 3
 
-        # TODO make this nicer
-        #self.resources_constrains = [[], [(0, 7)], [(20, 29)]] # Scenario 1 and 2
-        self.resources_constrains = [[], [], []] # Scenario 3
-#
+        # constrains for resources A,B,C for Scenario 1 and 2, time unit = 4hr
+        # self.resources_constrains = [[], [(0, 7)], [(20, 29)]] # Scenario 1 and 2
+        # self.resources_constrains = [[], [], []] # Scenario 3
+        self.resources_constrains = [[(0, 26)], [(0, 26)], [(0, 22)]]                # Scenario_New: Double opt
 
-        # TODO: Load data from csv file
-        self.object_types = {'Bridge': 0, 'Road': 1}
-        self.object_width = {'A_Klass': 10, '1_Klass': 6,
-                             '2_Klass': 4, '3_Klass': 2.8, 'Q_Klass': 4}
+        # # TODO: Load data from csv file
+        # self.object_types = {'Bridge': 0, 'Road': 1}
+        # self.object_width = {'A_Klass': 10, '1_Klass': 6,
+        #                      '2_Klass': 4, '3_Klass': 2.8, 'Q_Klass': 4}
+
+        self.object_types = {}
+        reader = csv.reader(open('./object_types.csv'))
+        for row in reader:
+            self.object_types[str(row[0])] = int(row[1])
+
+        self.object_width = {}
+        reader = csv.reader(open('./object_width.csv'))
+        for row in reader:
+            self.object_width[str(row[0])] = float(row[1])
 
     def damaged_objects(self):
         self.G = self.graph.copy()
@@ -128,7 +158,7 @@ class RestorationModel(object):
                 for k in range(j, j+task[1]):
                     sequence_matrix[i][k] = task[0]
 
-        # grupe list by tasks
+        # group list by tasks
         sequence_grouped = [[list(g) for k, g in groupby(l)]
                             for l in sequence_matrix]
 
@@ -155,7 +185,7 @@ class RestorationModel(object):
         # sort in decendent order
         sequence_enhanced.sort(key=itemgetter(1))
 
-        # groupe interventions ending in the same period
+        # group interventions ending in the same period
         sequence_enhanced = [list(group) for key, group in groupby(
             sequence_enhanced, itemgetter(1))]
 
@@ -191,8 +221,8 @@ class RestorationModel(object):
 
                 recovery = self.interventions[object_type,
                                               condition_state, intervention_type, 0]
-                # duration
-                # resources_needed
+                #1: duration
+                #2: resources_needed
                 fix_costs = self.interventions[object_type,
                                                condition_state, intervention_type, 3]
                 variable_costs_per_unit = self.interventions[object_type,
