@@ -131,15 +131,10 @@ class Engine(object):
             self.con_edges = read_shp('./test_data/connections.shp')
             self.od_matrix = np.genfromtxt('./test_data/od.csv', delimiter=',')
         else:
-            # self.road_graph = read_shp('./data/roads_clean.shp')
-            # self.od_graph = create_od_graph('./data/centroids.shp')
-            # self.con_edges = read_shp('./data/connections.shp')
-            # self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
-
-            self.road_graph = read_shp('./data_Newversion/critical_objs_removed.shp')
-            self.od_graph = create_od_graph('./data_Newversion/centroids.shp')
-            self.con_edges = read_shp('./data_Newversion/connections.shp')
-            self.od_matrix = np.genfromtxt('./data_Newversion/od.csv', delimiter=',')
+            self.road_graph = read_shp('./data/roads_clean.shp')
+            self.od_graph = create_od_graph('./data/centroids.shp')
+            self.con_edges = read_shp('./data/connections.shp')
+            self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
 
         self.graph = create_network_graph(self.road_graph, self.od_graph, self.con_edges)
 
@@ -150,6 +145,8 @@ class Engine(object):
 
         """
          Runs the DamageModel class on "damage" object and creates the damage dictionary (self.damage_dict)
+            TODO: Define whether get_damage_dict is directed or not, meaning ...and some elaboration on the process,
+            Does this refer to directed nodes for edges?
 
         Input parameters:
         ----------
@@ -168,23 +165,19 @@ class Engine(object):
         self.damage_dict = self.damage.get_damage_dict(directed=False)
         pass
 
-        # self.damage_new_saviz1 = {((750173.5, 187788.7), (750254.0, 187818.8)): ['a-2042', 0],
-        #                       ((759564.7, 193863.6), (759486.2, 193874.4)): ['b-2052', 0],
-        #                       ((757051.9, 190757.8), (757384.9, 191117.0)): ['b-1237', 0],
-        #                       ((761299.9, 197672.1), (760157.04, 195601.1)): ['a-1913', 1]}
 
     def initialize_state(self):
 
         """
         This function randomly selects objects and returns init_state (to be used as an input to the SimAnnealInterface.)
         """
-        # init_edges = list(self.damage_new_saviz1.keys()) # gets the edges of damaged objects
+
         init_edges = list(self.damage_dict.keys()) # gets the edges of damaged objects
         random.shuffle(init_edges)
 
         init_state = []
         for edge in init_edges:
-            if self.restoration_constraint:  #  we are assigning high priority restoration to all damaged edges (it would reach to optimal results faster)
+            if self.restoration_constraint:  # TODO we are assigning high priority restoration to all damaged edges ? why?
                 init_state.append((edge, 0))
             else:
                 init_state.append((edge, random.choice(self.restoration_types)))
@@ -223,14 +216,11 @@ class Engine(object):
                 initialize_state
                 run_traffic_model
                 anneal
-                format
 
-            Class:
-            -------
-                SimAnnealInterface(init_state, self.graph, self.od_graph,self.od_matrix, self.graph_damaged, damage,
-                self.output_directory)
-
-                RestorationModel(self.graph_damaged)
+        Class:
+        SimAnnealInterface(init_state, self.graph, self.od_graph,self.od_matrix, self.graph_damaged, damage,
+        self.output_directory)
+        TODO: write more info here for SA
 
         """
         self.initialize_network()
