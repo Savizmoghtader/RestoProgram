@@ -1,0 +1,874 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2019.11.13)  24 FEB 2020 15:33
+entering extended mode
+**./fig-3.tex
+(fig-3.tex
+LaTeX2e <2019-10-01>
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/standalone\sta
+ndalone.cls"
+Document Class: standalone 2018/03/26 v1.3a Class to compile TeX sub-files stan
+dalone
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\shellesc
+.sty"
+Package: shellesc 2016/06/07 v0.02b unified shell escape interface for LaTeX
+Package shellesc Info: Restricted shell escape enabled on input line 72.
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifl
+uatex.sty"
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifp
+df.sty"
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ifxetex\ifxe
+tex.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xkeyval\xkeyva
+l.sty"
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xkeyval\xkey
+val.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xkeyval\xkvu
+tils.tex"
+\XKV@toks=\toks14
+\XKV@tempa@toks=\toks15
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xkeyval\keyv
+al.tex"))
+\XKV@depth=\count80
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\sa@internal=\count81
+\c@sapage=\count82
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/standalone\sta
+ndalone.cfg"
+File: standalone.cfg 2018/03/26 v1.3a Default configuration file for 'standalon
+e' class
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.c
+ls"
+Document Class: article 2019/08/27 v1.4j Standard LaTeX document class
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size10.cl
+o"
+File: size10.clo 2019/08/27 v1.4j Standard LaTeX file (size option)
+)
+\c@part=\count83
+\c@section=\count84
+\c@subsection=\count85
+\c@subsubsection=\count86
+\c@paragraph=\count87
+\c@subparagraph=\count88
+\c@figure=\count89
+\c@table=\count90
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+\sa@box=\box27
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/frontendla
+yer\tikz.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/basiclayer
+\pgf.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utilities\
+pgfrcs.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgfutil-common.tex"
+\pgfutil@everybye=\toks16
+\pgfutil@tempdima=\dimen103
+\pgfutil@tempdimb=\dimen104
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgfutil-common-lists.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgfutil-latex.def"
+\pgfutil@abb=\box28
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ms\everyshi.st
+y"
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgfrcs.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf\pgf.revi
+sion.tex")
+Package: pgfrcs 2019/08/03 v3.1.4b (3.1.4b)
+))
+Package: pgf 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/basiclayer
+\pgfcore.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graph
+icx.sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graph
+ics.sty"
+Package: graphics 2019/07/20 v1.3b Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\trig.
+sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\g
+raphics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def\p
+dftex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen105
+\Gin@req@width=\dimen106
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/systemlaye
+r\pgfsys.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/systemla
+yer\pgfsys.code.tex"
+Package: pgfsys 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgfkeys.code.tex"
+\pgfkeys@pathtoks=\toks17
+\pgfkeys@temptoks=\toks18
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgfkeysfiltered.code.tex"
+\pgfkeys@tmptoks=\toks19
+))
+\pgf@x=\dimen107
+\pgf@y=\dimen108
+\pgf@xa=\dimen109
+\pgf@ya=\dimen110
+\pgf@xb=\dimen111
+\pgf@yb=\dimen112
+\pgf@xc=\dimen113
+\pgf@yc=\dimen114
+\pgf@xd=\dimen115
+\pgf@yd=\dimen116
+\w@pgf@writea=\write3
+\r@pgf@reada=\read1
+\c@pgf@counta=\count91
+\c@pgf@countb=\count92
+\c@pgf@countc=\count93
+\c@pgf@countd=\count94
+\t@pgf@toka=\toks20
+\t@pgf@tokb=\toks21
+\t@pgf@tokc=\toks22
+\pgf@sys@id@count=\count95
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/systemla
+yer\pgf.cfg"
+File: pgf.cfg 2019/08/03 v3.1.4b (3.1.4b)
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/systemla
+yer\pgfsys-pdftex.def"
+File: pgfsys-pdftex.def 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/systemla
+yer\pgfsys-common-pdf.def"
+File: pgfsys-common-pdf.def 2019/08/03 v3.1.4b (3.1.4b)
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/systemla
+yer\pgfsyssoftpath.code.tex"
+File: pgfsyssoftpath.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfsyssoftpath@smallbuffer@items=\count96
+\pgfsyssoftpath@bigbuffer@items=\count97
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/systemla
+yer\pgfsysprotocol.code.tex"
+File: pgfsysprotocol.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xcolor.
+sty"
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\c
+olor.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcore.code.tex"
+Package: pgfcore 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+math.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathcalc.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathutil.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathparser.code.tex"
+\pgfmath@dimen=\dimen117
+\pgfmath@count=\count98
+\pgfmath@box=\box29
+\pgfmath@toks=\toks23
+\pgfmath@stack@operand=\toks24
+\pgfmath@stack@operation=\toks25
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.basic.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.trigonometric.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.random.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.comparison.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.base.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.round.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.misc.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfunctions.integerarithmetics.code.tex")))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+mathfloat.code.tex"
+\c@pgfmathroundto@lastzeros=\count99
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+int.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorepoints.code.tex"
+File: pgfcorepoints.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@picminx=\dimen118
+\pgf@picmaxx=\dimen119
+\pgf@picminy=\dimen120
+\pgf@picmaxy=\dimen121
+\pgf@pathminx=\dimen122
+\pgf@pathmaxx=\dimen123
+\pgf@pathminy=\dimen124
+\pgf@pathmaxy=\dimen125
+\pgf@xx=\dimen126
+\pgf@xy=\dimen127
+\pgf@yx=\dimen128
+\pgf@yy=\dimen129
+\pgf@zx=\dimen130
+\pgf@zy=\dimen131
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorepathconstruct.code.tex"
+File: pgfcorepathconstruct.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@path@lastx=\dimen132
+\pgf@path@lasty=\dimen133
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorepathusage.code.tex"
+File: pgfcorepathusage.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@shorten@end@additional=\dimen134
+\pgf@shorten@start@additional=\dimen135
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorescopes.code.tex"
+File: pgfcorescopes.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfpic=\box30
+\pgf@hbox=\box31
+\pgf@layerbox@main=\box32
+\pgf@picture@serial@count=\count100
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcoregraphicstate.code.tex"
+File: pgfcoregraphicstate.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgflinewidth=\dimen136
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcoretransformations.code.tex"
+File: pgfcoretransformations.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@pt@x=\dimen137
+\pgf@pt@y=\dimen138
+\pgf@pt@temp=\dimen139
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorequick.code.tex"
+File: pgfcorequick.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcoreobjects.code.tex"
+File: pgfcoreobjects.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorepathprocessing.code.tex"
+File: pgfcorepathprocessing.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorearrows.code.tex"
+File: pgfcorearrows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfarrowsep=\dimen140
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcoreshade.code.tex"
+File: pgfcoreshade.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@max=\dimen141
+\pgf@sys@shading@range@num=\count101
+\pgf@shadingcount=\count102
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcoreimage.code.tex"
+File: pgfcoreimage.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcoreexternal.code.tex"
+File: pgfcoreexternal.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfexternal@startupbox=\box33
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorelayers.code.tex"
+File: pgfcorelayers.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcoretransparency.code.tex"
+File: pgfcoretransparency.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorepatterns.code.tex"
+File: pgfcorepatterns.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclay
+er\pgfcorerdf.code.tex"
+File: pgfcorerdf.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/modules\
+pgfmoduleshapes.code.tex"
+File: pgfmoduleshapes.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfnodeparttextbox=\box34
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/modules\
+pgfmoduleplot.code.tex"
+File: pgfmoduleplot.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/compatibil
+ity\pgfcomp-version-0-65.sty"
+Package: pgfcomp-version-0-65 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@nodesepstart=\dimen142
+\pgf@nodesepend=\dimen143
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/compatibil
+ity\pgfcomp-version-1-18.sty"
+Package: pgfcomp-version-1-18 2019/08/03 v3.1.4b (3.1.4b)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utilities\
+pgffor.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utilities\
+pgfkeys.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgfkeys.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/math\pgfma
+th.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+math.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilitie
+s\pgffor.code.tex"
+Package: pgffor 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgf
+math.code.tex")
+\pgffor@iter=\dimen144
+\pgffor@skip=\dimen145
+\pgffor@stack=\toks26
+\pgffor@toks=\toks27
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz\tikz.code.tex"
+Package: tikz 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s\pgflibraryplothandlers.code.tex"
+File: pgflibraryplothandlers.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@plot@mark@count=\count103
+\pgfplotmarksize=\dimen146
+)
+\tikz@lastx=\dimen147
+\tikz@lasty=\dimen148
+\tikz@lastxsaved=\dimen149
+\tikz@lastysaved=\dimen150
+\tikz@lastmovetox=\dimen151
+\tikz@lastmovetoy=\dimen152
+\tikzleveldistance=\dimen153
+\tikzsiblingdistance=\dimen154
+\tikz@figbox=\box35
+\tikz@figbox@bg=\box36
+\tikz@tempbox=\box37
+\tikz@tempbox@bg=\box38
+\tikztreelevel=\count104
+\tikznumberofchildren=\count105
+\tikznumberofcurrentchild=\count106
+\tikz@fig@count=\count107
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/modules\
+pgfmodulematrix.code.tex"
+File: pgfmodulematrix.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfmatrixcurrentrow=\count108
+\pgfmatrixcurrentcolumn=\count109
+\pgf@matrix@numberofcolumns=\count110
+)
+\tikz@expandcount=\count111
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarytopaths.code.tex"
+File: tikzlibrarytopaths.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarydecorations.text.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarydecorations.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/modules\
+pgfmoduledecorations.code.tex"
+\pgfdecoratedcompleteddistance=\dimen155
+\pgfdecoratedremainingdistance=\dimen156
+\pgfdecoratedinputsegmentcompleteddistance=\dimen157
+\pgfdecoratedinputsegmentremainingdistance=\dimen158
+\pgf@decorate@distancetomove=\dimen159
+\pgf@decorate@repeatstate=\count112
+\pgfdecorationsegmentamplitude=\dimen160
+\pgfdecorationsegmentlength=\dimen161
+)
+\tikz@lib@dec@box=\box39
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/decorations\pgflibrarydecorations.text.code.tex"
+\pgf@lib@dec@text@box=\box40
+)
+\tikz@lib@dec@te@box=\box41
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshapes.code.tex"
+File: tikzlibraryshapes.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshapes.geometric.code.tex"
+File: tikzlibraryshapes.geometric.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/shapes\pgflibraryshapes.geometric.code.tex"
+File: pgflibraryshapes.geometric.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshapes.misc.code.tex"
+File: tikzlibraryshapes.misc.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/shapes\pgflibraryshapes.misc.code.tex"
+File: pgflibraryshapes.misc.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshapes.symbols.code.tex"
+File: tikzlibraryshapes.symbols.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/shapes\pgflibraryshapes.symbols.code.tex"
+File: pgflibraryshapes.symbols.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshapes.arrows.code.tex"
+File: tikzlibraryshapes.arrows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/shapes\pgflibraryshapes.arrows.code.tex"
+File: pgflibraryshapes.arrows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshapes.callouts.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/shapes\pgflibraryshapes.callouts.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshapes.multipart.code.tex"
+File: tikzlibraryshapes.multipart.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/shapes\pgflibraryshapes.multipart.code.tex"
+File: pgflibraryshapes.multipart.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgfnodepartlowerbox=\box42
+\pgfnodeparttwobox=\box43
+\pgfnodepartthreebox=\box44
+\pgfnodepartfourbox=\box45
+\pgfnodeparttwentybox=\box46
+\pgfnodepartnineteenbox=\box47
+\pgfnodeparteighteenbox=\box48
+\pgfnodepartseventeenbox=\box49
+\pgfnodepartsixteenbox=\box50
+\pgfnodepartfifteenbox=\box51
+\pgfnodepartfourteenbox=\box52
+\pgfnodepartthirteenbox=\box53
+\pgfnodeparttwelvebox=\box54
+\pgfnodepartelevenbox=\box55
+\pgfnodeparttenbox=\box56
+\pgfnodepartninebox=\box57
+\pgfnodeparteightbox=\box58
+\pgfnodepartsevenbox=\box59
+\pgfnodepartsixbox=\box60
+\pgfnodepartfivebox=\box61
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryarrows.code.tex"
+File: tikzlibraryarrows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s\pgflibraryarrows.code.tex"
+File: pgflibraryarrows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\arrowsize=\dimen162
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarypositioning.code.tex"
+File: tikzlibrarypositioning.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryshadows.code.tex"
+File: tikzlibraryshadows.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryfadings.code.tex"
+File: tikzlibraryfadings.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s\pgflibraryfadings.code.tex"
+File: pgflibraryfadings.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarybackgrounds.code.tex"
+File: tikzlibrarybackgrounds.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+\pgf@layerbox@background=\box62
+\pgf@layerboxsaved@background=\box63
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryautomata.code.tex"
+File: tikzlibraryautomata.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarycalc.code.tex"
+File: tikzlibrarycalc.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarypatterns.code.tex"
+File: tikzlibrarypatterns.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s\pgflibrarypatterns.code.tex"
+File: pgflibrarypatterns.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryfit.code.tex"
+File: tikzlibraryfit.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgfplots\pgfpl
+ots.sty"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plots.revision.tex")
+Package: pgfplots 2018/03/28 v1.16 Data Visualization (1.16)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plots.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plotscore.code.tex"
+\t@pgfplots@toka=\toks28
+\t@pgfplots@tokb=\toks29
+\t@pgfplots@tokc=\toks30
+\pgfplots@tmpa=\dimen163
+\c@pgfplots@coordindex=\count113
+\c@pgfplots@scanlineindex=\count114
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/sys
+\pgfplotssysgeneric.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/lib
+s\pgfplotslibrary.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/old
+pgfcompatib\pgfplotsoldpgfsupp_loader.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s\pgflibraryfpu.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/uti
+l\pgfplotsutil.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/lis
+tstructure\pgfplotsliststructure.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/lis
+tstructure\pgfplotsliststructureext.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/lis
+tstructure\pgfplotsarray.code.tex"
+\c@pgfplotsarray@tmp=\count115
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/lis
+tstructure\pgfplotsmatrix.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/num
+table\pgfplotstableshared.code.tex"
+\c@pgfplotstable@counta=\count116
+\t@pgfplotstable@a=\toks31
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/lis
+tstructure\pgfplotsdeque.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/uti
+l\pgfplotsbinary.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/uti
+l\pgfplotsbinary.data.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/uti
+l\pgfplotsutil.verb.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/lib
+s\pgflibrarypgfplots.surfshading.code.tex"
+\c@pgfplotslibrarysurf@no=\count117
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/sys
+\pgflibrarypgfplots.surfshading.pgfsys-pdftex.def")))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/uti
+l\pgfplotscolormap.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots/uti
+l\pgfplotscolor.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plotsstackedplots.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plotsplothandlers.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plotsmeshplothandler.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plotsmeshplotimage.code.tex")))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plots.scaling.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plotscoordprocessing.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plots.errorbars.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plots.markers.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plotsticks.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgfplots\pgf
+plots.paths.code.tex")
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarydecorations.pathmorphing.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/decorations\pgflibrarydecorations.pathmorphing.code.tex"))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibrarydecorations.pathreplacing.code.tex"
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s/decorations\pgflibrarydecorations.pathreplacing.code.tex"))
+\pgfplots@numplots=\count118
+\pgfplots@xmin@reg=\dimen164
+\pgfplots@xmax@reg=\dimen165
+\pgfplots@ymin@reg=\dimen166
+\pgfplots@ymax@reg=\dimen167
+\pgfplots@zmin@reg=\dimen168
+\pgfplots@zmax@reg=\dimen169
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontend
+layer/tikz/libraries\tikzlibraryplotmarks.code.tex"
+File: tikzlibraryplotmarks.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librarie
+s\pgflibraryplotmarks.code.tex"
+File: pgflibraryplotmarks.code.tex 2019/08/03 v3.1.4b (3.1.4b)
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsmat
+h.sty"
+Package: amsmath 2019/04/01 v2.17c AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amstex
+t.sty"
+Package: amstext 2000/06/29 v2.01 AMS text
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsgen
+.sty"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks32
+\ex@=\dimen170
+))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsbsy
+.sty"
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen171
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsopn
+.sty"
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count119
+LaTeX Info: Redefining \frac on input line 227.
+\uproot@=\count120
+\leftroot@=\count121
+LaTeX Info: Redefining \overline on input line 389.
+\classnum@=\count122
+\DOTSCASE@=\count123
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
+\Mathstrutbox@=\box64
+\strutbox@=\box65
+\big@size=\dimen172
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
+\macc@depth=\count124
+\c@MaxMatrixCols=\count125
+\dotsspace@=\muskip10
+\c@parentequation=\count126
+\dspbrk@lvl=\count127
+\tag@help=\toks33
+\row@=\count128
+\column@=\count129
+\maxfields@=\count130
+\andhelp@=\toks34
+\eqnshift@=\dimen173
+\alignsep@=\dimen174
+\tagshift@=\dimen175
+\tagwidth@=\dimen176
+\totwidth@=\dimen177
+\lineht@=\dimen178
+\@envbody=\toks35
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks36
+LaTeX Info: Redefining \[ on input line 2855.
+LaTeX Info: Redefining \] on input line 2856.
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\amssy
+mb.sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\amsfo
+nts.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+No file fig-3.aux.
+\openout1 = `fig-3.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+ABD: EveryShipout initializing macros
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\su
+pp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count131
+\scratchdimen=\dimen179
+\scratchbox=\box66
+\nofMPsegments=\count132
+\nofMParguments=\count133
+\everyMPshowfont=\toks37
+\MPscratchCnt=\count134
+\MPscratchDim=\dimen180
+\MPnumerator=\count135
+\makeMPintoPDFobject=\count136
+\everyMPtoPDFconversion=\toks38
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\epsto
+pdf-base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\inf
+warerr.sty"
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\grfex
+t.sty"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvd
+efinekeys.sty"
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ltx
+cmds.sty"
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\kvopt
+ions.sty"
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvs
+etkeys.sty"
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ete
+xcmds.sty"
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+)))
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\pdf
+texcmds.sty"
+Package: pdftexcmds 2019/07/25 v0.30 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+Package pgfplots notification 'compat/show suggested version=true': document ha
+s been generated with the most recent feature set (\pgfplotsset{compat=1.16}).
+
+(costs_01.tex)
+LaTeX Font Info:    Trying to load font information for U+msa on input line 148
+.
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsa.
+fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 148
+.
+
+("C:\Users\smoghtade\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.
+fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) (los_01.tex) (resources_01.tex) [1
+
+{C:/Users/smoghtade/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] (fig-3.
+aux) ) 
+Here is how much of TeX's memory you used:
+ 27047 strings out of 492452
+ 715664 string characters out of 3118195
+ 1069436 words of memory out of 3000000
+ 30938 multiletter control sequences out of 15000+200000
+ 4931 words of font info for 20 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 79i,18n,136p,769b,2308s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/smoghtade/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmmi7.pfb><C:/Users/smoghtade/AppData/Local/Programs/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/smoghtade/AppData/Local/Programs
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+Output written on fig-3.pdf (1 page, 56601 bytes).
+PDF statistics:
+ 47 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 117 words of extra memory for PDF output out of 10000 (max. 10000000)
+
