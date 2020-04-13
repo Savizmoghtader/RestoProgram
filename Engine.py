@@ -131,15 +131,15 @@ class Engine(object):
             self.con_edges = read_shp('./test_data/connections.shp')
             self.od_matrix = np.genfromtxt('./test_data/od.csv', delimiter=',')
         else:
-            # self.road_graph = read_shp('./data/roads_clean.shp')
-            # self.od_graph = create_od_graph('./data/centroids.shp')
-            # self.con_edges = read_shp('./data/connections.shp')
-            # self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
-
-            self.road_graph = read_shp('./data_Newversion/critical_objs_removed.shp')
-            self.od_graph = create_od_graph('./data_Newversion/centroids.shp')
-            self.con_edges = read_shp('./data_Newversion/connections.shp')
-            self.od_matrix = np.genfromtxt('./data_Newversion/od.csv', delimiter=',')
+            self.road_graph = read_shp('./data/roads_clean.shp')
+            self.od_graph = create_od_graph('./data/centroids.shp')
+            self.con_edges = read_shp('./data/connections.shp')
+            self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
+            #
+            # self.road_graph = read_shp('./data_Newversion/critical_objs_removed.shp')
+            # self.od_graph = create_od_graph('./data_Newversion/centroids.shp')
+            # self.con_edges = read_shp('./data_Newversion/connections.shp')
+            # self.od_matrix = np.genfromtxt('./data_Newversion/od.csv', delimiter=',')
 
         self.graph = create_network_graph(self.road_graph, self.od_graph, self.con_edges)
 
@@ -236,6 +236,9 @@ class Engine(object):
         self.initialize_network()
         self.initialize_damage()
         init_state = self.initialize_state()
+
+        # init_state = [(((6000.0, 4000.0), (6000.0, 10000.0)), 0), (((6000.0, 10000.0), (12000.0, 18000.0)), 0),
+        #  (((6000.0, 10000.0), (0.0, 18000.0)), 2), (((3000.0, 0.0), (0.0, 18000.0)), 2)]
 
         # getting t_k, flow, hours, distances, lost_trips by running the traffic model before damage
         no_damage = self.run_traffic_model(self.graph, self.od_graph)

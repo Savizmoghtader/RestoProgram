@@ -74,8 +74,8 @@ class RestorationModel(object):
 
         # constrains for resources A,B,C for Scenario 1 and 2, time unit = 4hr
         # self.resources_constrains = [[], [(0, 7)], [(20, 29)]] # Scenario 1 and 2
-        # self.resources_constrains = [[], [], []] # Scenario 3
-        self.resources_constrains = [[(0, 26)], [(0, 26)], [(0, 22)]]                # Scenario_New: Double opt
+        self.resources_constrains = [[], [], []] # Scenario 3
+        # self.resources_constrains = [[(0, 26)], [(0, 26)], [(0, 22)]]                # Scenario_New: Double opt
 
         # # TODO: Load data from csv file
         # self.object_types = {'Bridge': 0, 'Road': 1}

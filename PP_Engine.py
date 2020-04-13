@@ -68,15 +68,15 @@ class PpEngine(object):
             self.con_edges = read_shp('./test_data/connections.shp')
             self.od_matrix = np.genfromtxt('./test_data/od.csv', delimiter=',')
         else:
-            # self.road_graph = read_shp('./data/roads_clean.shp')
-            # self.od_graph = create_od_graph('./data/centroids.shp')
-            # self.con_edges = read_shp('./data/connections.shp')
-            # self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
+            self.road_graph = read_shp('./data/roads_clean.shp')
+            self.od_graph = create_od_graph('./data/centroids.shp')
+            self.con_edges = read_shp('./data/connections.shp')
+            self.od_matrix = np.genfromtxt('./data/od.csv', delimiter=',')
 
-            self.road_graph = read_shp('./data_Newversion/critical_objs_removed.shp')
-            self.od_graph = create_od_graph('./data_Newversion/centroids.shp')
-            self.con_edges = read_shp('./data_Newversion/connections.shp')
-            self.od_matrix = np.genfromtxt('./data_Newversion/od.csv', delimiter=',')
+            # self.road_graph = read_shp('./data_Newversion/critical_objs_removed.shp')
+            # self.od_graph = create_od_graph('./data_Newversion/centroids.shp')
+            # self.con_edges = read_shp('./data_Newversion/connections.shp')
+            # self.od_matrix = np.genfromtxt('./data_Newversion/od.csv', delimiter=',')
 
         self.graph = create_network_graph(self.road_graph, self.od_graph, self.con_edges)
         pass
