@@ -3,6 +3,7 @@ from restorationmodel import RestorationModel
 from traffic_fw.trafficmodel import TrafficModel
 from traffic_fw.initialize import *
 from SimAnneal_Interface import SimAnnealInterface
+from PSO_Interface import My_DPSO_Interface
 
 import random
 import ast
@@ -249,12 +250,19 @@ class Engine(object):
 
         damage = [no_damage, initial_damage]
 
-        optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
+        optimize = My_DPSO_Interface(init_state, self.graph, self.od_graph,
                                self.od_matrix, self.graph_damaged, damage, self.output_directory)
 
         optimize.copy_strategy = "slice"
 
-        state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
+        state, e = optimize.DPSO()  # Minimizes the energy of a system by simulated annealing
+
+        # optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
+        #                        self.od_matrix, self.graph_damaged, damage, self.output_directory)
+        #
+        # optimize.copy_strategy = "slice"
+        #
+        # state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
 
         print("consequences: %i" % e)
 
