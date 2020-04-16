@@ -111,4 +111,6 @@ class SimAnnealInterface(Annealer):
         with open(self.fdir+'energy.csv', 'a') as f:
             f.write('\n'+str(e))
 
+        #print("SA Energy Functions is Uesd ....")
+
         return e

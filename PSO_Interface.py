@@ -1,7 +1,7 @@
-from simanneal import Annealer
-from restorationmodel import RestorationModel
-from ToolBox import *
-from joblib import Parallel, delayed
+# from simanneal import Annealer
+# from restorationmodel import RestorationModel
+# from ToolBox import *
+# from joblib import Parallel, delayed
 from DiscretePSO import DPSO_Optimizer
 
 import numpy as np
@@ -44,8 +44,8 @@ class My_DPSO_Interface(DPSO_Optimizer):
         """
         self.fdir = fdir
 
-        # with open(self.fdir+'energy.txt', 'w') as f:
-        #     f.write('Energy')
+        with open(self.fdir+'energy.txt', 'w') as f:
+            f.write('Energy')
 
         # self.restoration_types = [0, 1, 2]
         self.restoration_names = {}

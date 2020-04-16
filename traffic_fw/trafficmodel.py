@@ -178,7 +178,8 @@ class TrafficModel(object):
                 str(self.threshold), str(self.n_iter_tm)]
 
         if WINDOWS:
-            comand_julia = 'C:\\Users\\smoghtade\\AppData\\Local\\Julia-1.2.0\\bin\\julia '
+            # comand_julia = 'D:\\Program Files\\Julia-1.2.0\\bin\\julia '
+            comand_julia = 'julia '
         else:
             comand_julia = 'julia '
         output = subprocess.check_output(

@@ -21,7 +21,6 @@ def round_figures(x, n):
     """Returns x rounded to n significant figures."""
     return round(x, int(n - math.ceil(math.log10(abs(x)))))
 
-
 def time_string(seconds):
     """Returns time in seconds as a string formatted HHHH:MM:SS."""
     s = int(round(seconds))  # round to nearest second
@@ -81,8 +80,8 @@ class DPSO_Optimizer(object):
     n_random = 4
     size_population = 2
     nswarm = 2
-    c1 = 0.9 # Individual coeff
-    c2 = 0.9 # Social coeff
+    c1 = 0.5 # Individual coeff
+    c2 = 0.3 # Social coeff
     maxIterations = 20
     w = 0.6 # Inertial Coeff
 
@@ -110,20 +109,12 @@ class DPSO_Optimizer(object):
         self.upsilon = 83.27 * 8  # hourly wage [when lost or delayed trips]* 8 hours/day
         self.day_factor = 9  # factor to find the area under the trip distribution curve(average value*9= total trips per day for a zone)
 
-        #self.AllNodes = list(self.distance_dict.keys())  # names of the cities
-
-        self.AllNodes = copy.deepcopy(init_state_str)
-
+        self.AllNodes = init_state_str
         self.node_indices = list(range(self.nNodes))
 
         self.dict_idx = {}
         for i in range(len(self.AllNodes)):
             self.dict_idx[self.AllNodes[i]] = self.node_indices[i]
-
-        self.state = init_state_str
-        self.state_idx = self.getStateIDX(self.state)
-        init_state_idx = self.getStateIDX(init_state_str)
-        self.home_idx = init_state_idx[0]
 
         if init_state_str:
             self.state = self.copy_state(init_state_str)
@@ -133,6 +124,10 @@ class DPSO_Optimizer(object):
         else:
             raise ValueError('No valid values supplied for neither \
             initial_state nor load_state')
+
+        self.state_idx = self.getStateIDX(self.state)
+        init_state_idx = self.getStateIDX(init_state_str)
+        self.home_idx = init_state_idx[0]
 
         signal.signal(signal.SIGINT, self.set_user_exit)
 
@@ -157,7 +152,6 @@ class DPSO_Optimizer(object):
     def energy(self, state_str):
         """Calculates the length of the route."""
         e = 0
-
         restoration = RestorationModel(self.graph_damaged)
         restoration.run(state_str)
         restoration_graphs = restoration.get_restoration_graphs()
@@ -178,8 +172,9 @@ class DPSO_Optimizer(object):
             e += sum(restoration_costs[idx]) + dt * (self.day_factor * values[2] * np.sum(self.mu * self.xi) +
                                                      values[3] * np.sum(self.mu * (self.nu * self.F_w + self.rho)) +
                                                      values[4] * self.upsilon)
-        # with open(self.fdir + 'energy.csv', 'a') as f:
-        #     f.write('\n' + str(e))
+        with open(self.fdir + 'energy.csv', 'a') as f:
+            f.write('\n' + str(e))
+        # print("     ------>  PSO Energy Functions is Used ....")
 
         return e
 
@@ -213,17 +208,14 @@ class DPSO_Optimizer(object):
         for i in range(self.n_random - 1):
             citiesIdx = self.node_indices.copy()
             citiesIdx.pop(self.home_idx)
-            if (use_weights == True):
-                pass
-            else:
-                # Shuffle cities at random
-                random.shuffle(citiesIdx)
-                citiesIdx.insert(0, self.home_idx)
-                E_new = self.energy(self.getStateSTR(citiesIdx))
-                if (E_new < E):
-                    E = copy.deepcopy(E_new)
-                    # print('Energy = ', E)
-                    rand_state_idx = citiesIdx.copy()
+            # Shuffle cities at random
+            random.shuffle(citiesIdx)
+            citiesIdx.insert(0, self.home_idx)
+            E_new = self.energy(self.getStateSTR(citiesIdx))
+            if (E_new < E):
+                E = copy.deepcopy(E_new)
+                # print('Energy = ', E)
+                rand_state_idx = citiesIdx.copy()
         # Return the best solution amongst all randoms ( Energy)
         return rand_state_idx
 
@@ -257,23 +249,6 @@ class DPSO_Optimizer(object):
             return state.copy()
 
     def update(self, step, gbestE, acceptance, improvement, highlight=False):
-        """Prints the current temperature, energy, acceptance rate,
-        improvement rate, elapsed time, and remaining time.
-
-        The acceptance rate indicates the percentage of moves since the last
-        update that were accepted by the Metropolis algorithm.  It includes
-        moves that decreased the energy, moves that left the energy
-        unchanged, and moves that increased the energy yet were reached by
-        thermal excitation.
-
-        The improvement rate indicates the percentage of moves since the
-        last update that strictly decreased the energy.  At high
-        temperatures it will include both moves that improved the overall
-        state and moves that simply undid previously accepted moves that
-        increased the energy by thermal excititation.  At low temperatures
-        it will tend toward zero as the moves that can decrease the energy
-        are exhausted and moves that would increase the energy are no longer
-        thermally accessible."""
 
         if highlight:
             cl = "\033[;1m" + "\033[0;32m"  #Yellow
@@ -301,14 +276,6 @@ class DPSO_Optimizer(object):
 
 
     def DPSO(self):
-        """Minimizes the energy of a system by simulated annealing.
-
-        Parameters
-        state : an initial arrangement of the system
-
-        Returns
-        (state, energy): the best state and energy found.
-        """
 
         self.start = time.time()
         step, trials, accepts, improves = 0, 0, 0, 0
@@ -331,7 +298,6 @@ class DPSO_Optimizer(object):
         pbest = Swarm
         self.update(step, gbest.energy, None, None)
 
-
         # RUNNING THE ALGORITHM:
         # for each time step (iteration)
         for t in range(self.maxIterations):
@@ -341,6 +307,7 @@ class DPSO_Optimizer(object):
             for i in range(self.size_population):
                 trials += 1
                 temp_velocity = Swarm[i].velocity
+                print("\n Swarm[i].state_idx = ", Swarm[i].state_idx)
                 # generates all swap operators to calculate (pbest - x(t-1))
                 for n in range(length):
                     if Swarm[i].state_idx[n] != pbest[i].state_idx[n]:
@@ -377,21 +344,21 @@ class DPSO_Optimizer(object):
                 if cost_current_solution < pbest[i].energy:
                     pbest[i] = Swarm[i].deepcopy()  # copy of the pbest solution
                     accepts += 1
-                    self.update(step, pbest[i].energy, accepts / trials, improves / trials, False)
+                self.update(step, pbest[i].energy, accepts / trials, improves / trials, False)
 
 
             for i in range(self.size_population):
-                # print('\npbest_{0} = {1} miles'.format(i, gbest.distance))
                 gbest.update_energy(self.energy(self.getStateSTR(gbest.state_idx)))
+                pbest[i].update_energy(self.energy(self.getStateSTR(pbest[i].state_idx)))
                 if pbest[i].energy < gbest.energy:
                     gbest = pbest[i].deepcopy()  # copy of the pbest solution
                     gbest.update_energy(self.energy(self.getStateSTR(gbest.state_idx)))
                     improves += 1
-                    self.update(step, gbest.energy, accepts / trials, improves / trials, True)
+                self.update(step, gbest.energy, accepts / trials, improves / trials, True)
+                print("   -->  gbest.state_idx = ", gbest.state_idx)
 
-
-                #trials, accepts, improves = 0, 1, 1
-
-            self.state = self.getStateSTR(gbest.state_idx)
+            trials, accepts, improves = 0, 1, 1
+            #self.state = self.getStateSTR(gbest.state_idx)
+        print("   -->  gbest.state_idx = ", gbest.state_idx)
 
         return self.getStateSTR(gbest.state_idx), gbest.energy

@@ -250,19 +250,20 @@ class Engine(object):
 
         damage = [no_damage, initial_damage]
 
+
+        ######################## PSO OPTIMIZATION ##########################
         optimize = My_DPSO_Interface(init_state, self.graph, self.od_graph,
                                self.od_matrix, self.graph_damaged, damage, self.output_directory)
-
         optimize.copy_strategy = "slice"
+        state, e = optimize.DPSO()
+        ###################################################################
 
-        state, e = optimize.DPSO()  # Minimizes the energy of a system by simulated annealing
-
+        ###################### SIMANNEAL OPTIMIZATION ######################
         # optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
-        #                        self.od_matrix, self.graph_damaged, damage, self.output_directory)
-        #
+        #                        self.od_matrix, self.graph_damaged, damage, self.output_directory)        #
         # optimize.copy_strategy = "slice"
-        #
         # state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
+        ###################################################################
 
         print("consequences: %i" % e)
 
