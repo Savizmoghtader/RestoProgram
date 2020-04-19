@@ -255,7 +255,7 @@ class Engine(object):
         optimize = My_DPSO_Interface(init_state, self.graph, self.od_graph,
                                self.od_matrix, self.graph_damaged, damage, self.output_directory)
         optimize.copy_strategy = "slice"
-        state, e = optimize.DPSO()
+        state, e = optimize.DPSO_II()
         ###################################################################
 
         ###################### SIMANNEAL OPTIMIZATION ######################

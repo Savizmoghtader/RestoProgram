@@ -80,10 +80,10 @@ class DPSO_Optimizer(object):
     n_random = 4
     size_population = 2
     nswarm = 2
-    c1 = 0.5 # Individual coeff
-    c2 = 0.3 # Social coeff
-    maxIterations = 20
-    w = 0.6 # Inertial Coeff
+    c1 = 1.5 # Individual coeff
+    c2 = 1.3 # Social coeff
+    maxIterations = 10
+    w = 0.9 # Inertial Coeff
 
     copy_strategy = 'deepcopy'
     user_exit = False
@@ -198,9 +198,9 @@ class DPSO_Optimizer(object):
     # Get the best random solution (indices)
     def get_random_solution(self, use_weights: bool = False):
         citiesIdx = self.node_indices.copy()
-        citiesIdx.pop(self.home_idx)
+        # citiesIdx.pop(self.home_idx)
         random.shuffle(citiesIdx)
-        citiesIdx.insert(0, self.home_idx)
+        # citiesIdx.insert(0, self.home_idx)
         cities_str = self.getStateSTR(citiesIdx)
         E = self.energy(self.getStateSTR(citiesIdx))
         rand_state_idx = citiesIdx.copy()
@@ -360,5 +360,87 @@ class DPSO_Optimizer(object):
             trials, accepts, improves = 0, 1, 1
             #self.state = self.getStateSTR(gbest.state_idx)
         print("   -->  gbest.state_idx = ", gbest.state_idx)
+
+        return self.getStateSTR(gbest.state_idx), gbest.energy
+
+    def DPSO_II(self):
+
+        self.start = time.time()
+        step, trials, accepts, improves = 0, 0, 0, 0
+        length = self.nNodes - 1
+        # fig, ax = plt.subplots()
+        # ax.grid()
+
+        # Create random solutions for each particle
+        Swarm = []  # a list of State objects
+        for i in range(self.size_population):
+            state_idx = self.get_random_solution()
+            state = Particle(state_idx, self.energy(self.getStateSTR(state_idx)))
+            state.velocity = [0] * (length + 1)
+            Swarm.append(state)
+
+        # initialize gbest and pbest
+        Swarm.sort()
+        gbest = Swarm[0].deepcopy()  # best solution (MIN)
+        pbest = Swarm
+        self.update(step, gbest.energy, None, None)
+
+        delta_w = (self.w - 0.4) / (self.maxIterations - 1)
+
+        # RUNNING THE ALGORITHM:
+        # for each time step (iteration)
+        for t in range(self.maxIterations):
+            step += 1
+            # for each particle in the swarm
+            # each particle is an object of State
+            for i in range(self.size_population):
+                trials += 1
+                # temp_velocity = Swarm[i].velocity
+                previous_route = np.array(Swarm[i].state_idx)
+
+                # print(" w = {0}".format(w))
+                inertia = self.w * np.array(Swarm[i].velocity)
+                personal = self.c1 * np.random.uniform(0, 1) * (np.array(pbest[i].state_idx) - previous_route)
+                social = self.c2 * np.random.uniform(0, 1) * (np.array(gbest.state_idx) - previous_route)
+
+                new_velocity = inertia + personal + social
+
+                temp_route = np.add(previous_route, new_velocity)
+                _, _, new_route = np.unique(temp_route, return_index=True, return_inverse=True, return_counts=False)
+
+                Swarm[i].velocity = new_velocity.tolist()
+                Swarm[i].state_idx = new_route.tolist()
+
+                # gets cost of the current solution
+                Swarm[i].update_energy(self.energy(self.getStateSTR(Swarm[i].state_idx)))
+                cost_current_solution = Swarm[i].energy
+
+                # checks if current solution is pbest solution
+                pbest[i].update_energy(self.energy(self.getStateSTR(pbest[i].state_idx)))
+                if cost_current_solution < pbest[i].energy:
+                    pbest[i] = Swarm[i].deepcopy()  # copy of the pbest solution
+                    accepts += 1
+                self.update(step, pbest[i].energy, accepts / trials, improves / trials, False)
+                # ax.scatter(t, pbest[i].distance)
+
+                pbest.sort()
+                if pbest[0].energy < gbest.energy:
+                    gbest = pbest[0].deepcopy()
+                    gbest.velocity = pbest[0].velocity.copy()
+                    gbest.update_energy(self.energy(self.getStateSTR(gbest.state_idx)))
+                    improves += 1
+                self.update(step, gbest.energy, accepts / trials, improves / trials, True)
+                # print("   -->  gbest.state_idx = ", gbest.state_idx)
+                # print('\ngbest = {0} miles'.format(gbest.distance))
+
+                self.w = self.w - delta_w
+
+                # ax.set(xlabel='Iteration', ylabel='Cost (miles)',
+                #        title='PSO for TSP')
+                # plt.show()
+
+            trials, accepts, improves = 0, 1, 1
+            # self.state = self.getStateSTR(gbest.state_idx)
+        #print("   -->  gbest.state_idx = ", gbest.state_idx)
 
         return self.getStateSTR(gbest.state_idx), gbest.energy
