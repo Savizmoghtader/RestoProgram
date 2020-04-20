@@ -16,6 +16,9 @@ from restorationmodel import RestorationModel
 from ToolBox import *
 from joblib import Parallel, delayed
 from operator import attrgetter
+import matplotlib
+import matplotlib.pyplot as plt
+
 
 def round_figures(x, n):
     """Returns x rounded to n significant figures."""
@@ -33,10 +36,10 @@ def time_string(seconds):
 class Particle:
 
     # Create a new state
-    def __init__(self, state_idx: [], energy=0):
+    def __init__(self, state_idx: [], state_velocity: [], energy=0):
         self.state_idx = state_idx
         self.energy = energy
-        self.velocity = []  # Just for the sake of PSO
+        self.velocity = state_velocity  # Just for the sake of PSO
 
     # Compare states
     def __eq__(self, other):
@@ -55,14 +58,17 @@ class Particle:
 
     # Create a shallow copy
     def copy(self):
-        return Particle(self.state_idx, self.energy)
+        return Particle(self.state_idx, self.velocity, self.energy)
 
     # Create a deep copy
     def deepcopy(self):
-        return Particle(copy.deepcopy(self.state_idx), copy.deepcopy(self.energy))
+        return Particle(copy.deepcopy(self.state_idx), copy.deepcopy(self.velocity), copy.deepcopy(self.energy))
 
     def clearVelocity(self):
         del self.velocity[:]
+
+    def setVelocity(self, new_velocity):
+        self.velocity = new_velocity
 
     # Update energy
     def update_energy(self, energy):
@@ -77,7 +83,7 @@ class DPSO_Optimizer(object):
     """
     __metaclass__ = abc.ABCMeta
 
-    n_random = 4
+    n_random = 2
     size_population = 2
     nswarm = 2
     c1 = 1.5 # Individual coeff
@@ -89,16 +95,15 @@ class DPSO_Optimizer(object):
     user_exit = False
     save_state_on_exit = False
 
-    def __init__(self, init_state_str, graph, od_graph, od_matrix, graph_damaged, damage, load_state=None, fdir=None):
+    def __init__(self, init_state, graph, od_graph, od_matrix, graph_damaged, damage, load_state=None, fdir=None):
 
+        # Used to calculate Energy
         self.graph = graph
         self.od_graph = od_graph
         self.od_matrix = od_matrix
         self.graph_damaged = graph_damaged
         self.no_damage = damage[0]
         self.initial_damage = damage[1]
-        self.fdir = fdir
-        self.nNodes = len(init_state_str)
 
         # Model parameters for indirect costs
         self.mu = np.array([0.94, 0.06])  # % of distribution of cars vs. trucks
@@ -107,41 +112,40 @@ class DPSO_Optimizer(object):
         self.nu = 1.88  # mean fuel price
         self.rho = np.array([14.39, 32.54]) / 100  # Operating costs (without fuel) for cars vs. trucks/ 100 km
         self.upsilon = 83.27 * 8  # hourly wage [when lost or delayed trips]* 8 hours/day
-        self.day_factor = 9  # factor to find the area under the trip distribution curve(average value*9= total trips per day for a zone)
+        self.day_factor = 9  # factor to find the area under the trip distribution curve
 
-        self.AllNodes = init_state_str
+        self.fdir = fdir
+        self.nNodes = len(init_state)
+        self.AllNodes = init_state
         self.node_indices = list(range(self.nNodes))
-
         self.dict_idx = {}
         for i in range(len(self.AllNodes)):
             self.dict_idx[self.AllNodes[i]] = self.node_indices[i]
 
-        if init_state_str:
-            self.state = self.copy_state(init_state_str)
+        if init_state:
+            self.init_state = self.copy_state(init_state)
         elif load_state:
             with open(load_state, 'rb') as fh:
-                self.state = pickle.load(fh)
+                self.init_state = pickle.load(fh)
         else:
             raise ValueError('No valid values supplied for neither \
             initial_state nor load_state')
 
-        self.state_idx = self.getStateIDX(self.state)
-        init_state_idx = self.getStateIDX(init_state_str)
-        self.home_idx = init_state_idx[0]
+        self.init_state_idx = self.getStateIDX(self.init_state)
+        self.home_idx = self.init_state_idx[0]
 
         signal.signal(signal.SIGINT, self.set_user_exit)
 
-        self.velocity = [] # Just for the sake of PSO
-        self.swarm = []  # a list of State objects
-
     def save_state(self, fname=None):
         """Saves state"""
+        gbest_state = self.getState(self.gbest.state_idx)
+        gbest_energy = self.gbest.energy
         if not fname:
             date = datetime.datetime.now().isoformat().split(".")[0]
-            fname = date + "_energy_" + str(self.energy(self.state)) + ".state"
+            fname = date + "_energy_" + str(gbest_energy) + ".state"
         print("Saving state to: %s" % fname)
         with open(self.fdir+'state.state', "wb") as fh:
-            pickle.dump(self.state, fh)
+            pickle.dump(gbest_state, fh)
 
     @abc.abstractmethod
     def move(self):
@@ -149,11 +153,11 @@ class DPSO_Optimizer(object):
         return
 
     
-    def energy(self, state_str):
+    def energy(self, state):
         """Calculates the length of the route."""
         e = 0
         restoration = RestorationModel(self.graph_damaged)
-        restoration.run(state_str)
+        restoration.run(state)
         restoration_graphs = restoration.get_restoration_graphs()
         restoration_times = restoration.get_restoration_times()
         restoration_costs = restoration.get_restoration_costs()
@@ -161,7 +165,7 @@ class DPSO_Optimizer(object):
         damaged = []
         damaged.append(get_delta(self.no_damage, self.initial_damage))
 
-        sim_results = Parallel(n_jobs=4)(delayed(parallel_model)(
+        sim_results = Parallel(n_jobs=-2)(delayed(parallel_model)(
             graph, self.od_graph, self.od_matrix) for graph in restoration_graphs[:-1])
         for values in sim_results:
             damaged.append(get_delta(self.no_damage, values))
@@ -179,30 +183,30 @@ class DPSO_Optimizer(object):
         return e
 
 
-    def getStateIDX(self, state_str):
-
+    # Get the indices (routes) of a state
+    def getStateIDX(self, state):
         state_idx = copy.deepcopy(self.node_indices)
-        for i in range(len(state_str)):
-            state_idx[i] = self.dict_idx[state_str[i]]
-
+        for i in range(len(state)):
+            state_idx[i] = self.dict_idx[state[i]]
         return state_idx
 
-    def getStateSTR(self, state_idx):
+    # Get a state using a provided index
+    def getState(self, state_idx):
         # get city names from indices
         temp = list(self.dict_idx.keys())
-        state_str = []
+        state = []
         for i in state_idx:
-            state_str.append(temp[i])
-        return state_str
+            state.append(temp[i])
+        return state
 
     # Get the best random solution (indices)
     def get_random_solution(self, use_weights: bool = False):
         citiesIdx = self.node_indices.copy()
-        # citiesIdx.pop(self.home_idx)
+        #citiesIdx.pop(self.home_idx)
         random.shuffle(citiesIdx)
-        # citiesIdx.insert(0, self.home_idx)
-        cities_str = self.getStateSTR(citiesIdx)
-        E = self.energy(self.getStateSTR(citiesIdx))
+        #citiesIdx.insert(0, self.home_idx)
+        cities_str = self.getState(citiesIdx)
+        E = self.energy(self.getState(citiesIdx))
         rand_state_idx = citiesIdx.copy()
 
         for i in range(self.n_random - 1):
@@ -211,7 +215,7 @@ class DPSO_Optimizer(object):
             # Shuffle cities at random
             random.shuffle(citiesIdx)
             citiesIdx.insert(0, self.home_idx)
-            E_new = self.energy(self.getStateSTR(citiesIdx))
+            E_new = self.energy(self.getState(citiesIdx))
             if (E_new < E):
                 E = copy.deepcopy(E_new)
                 # print('Energy = ', E)
@@ -219,19 +223,10 @@ class DPSO_Optimizer(object):
         # Return the best solution amongst all randoms ( Energy)
         return rand_state_idx
 
-
     def set_user_exit(self, signum, frame):
         """Raises the user_exit flag, further iterations are stopped
         """
         self.user_exit = True
-
-    # TODO: Remove or re-use this
-    def set_schedule(self, schedule):
-        """Takes the output from `auto` and sets the attributes
-        """
-        self.Tmax = schedule['tmax']
-        self.Tmin = schedule['tmin']
-        self.steps = int(schedule['steps'])
 
     def copy_state(self, state):
         """Returns an exact copy of the provided state
@@ -258,7 +253,7 @@ class DPSO_Optimizer(object):
         elapsed = time.time() - self.start
         if step == 0:
             print(cl+'GBest Energy    Accept   Improve     Elapsed   Remaining')
-            sys.stdout.write('\r%12.2f                      %s            ' % \
+            sys.stdout.write('\n%12.2f                      %s            ' % \
                 (gbestE, time_string(elapsed)))
             sys.stdout.flush()
             # with open(self.fdir+'log.csv','w') as f:
@@ -279,6 +274,82 @@ class DPSO_Optimizer(object):
 
         self.start = time.time()
         step, trials, accepts, improves = 0, 0, 0, 0
+        length = self.nNodes - 1
+        fig, ax = plt.subplots()
+        ax.grid()
+
+        # Create random solutions for each particle
+        Swarm = []  # a list of State objects
+        for i in range(self.size_population):
+            state_idx = self.get_random_solution()
+            tempVel = [0] * (length + 1)
+            state = Particle(state_idx, tempVel, self.energy(self.getState(state_idx)))
+
+            Swarm.append(state)
+
+        # initialize gbest and pbest
+        Swarm.sort()
+        gbest = Swarm[0].deepcopy()  # best solution (MIN)
+        pbest = Swarm
+        self.update(step, gbest.energy, None, None)
+
+        delta_w = (self.w - 0.4) / (self.maxIterations - 1)
+
+        # for each time step (iteration)
+        for t in range(self.maxIterations):
+            step += 1
+            # for each particle in the swarm
+            for i in range(self.size_population):
+                trials += 1
+
+                previous_route = np.array(Swarm[i].state_idx)
+                inertia = self.w * np.array(Swarm[i].velocity)
+                personal = self.c1 * np.random.uniform(0, 1) * (np.array(pbest[i].state_idx) - previous_route)
+                social = self.c2 * np.random.uniform(0, 1) * (np.array(gbest.state_idx) - previous_route)
+
+                new_velocity = inertia + personal + social
+
+                temp_route = np.add(previous_route, new_velocity)
+                _, _, new_route = np.unique(temp_route, return_index=True, return_inverse=True, return_counts=False)
+
+                Swarm[i].velocity = new_velocity.tolist()
+                Swarm[i].state_idx = new_route.tolist()
+
+                # gets cost of the current solution
+                Swarm[i].update_energy(self.energy(self.getState(Swarm[i].state_idx)))
+                cost_current_solution = Swarm[i].energy
+
+                # checks if current solution is pbest solution
+                pbest[i].update_energy(self.energy(self.getState(pbest[i].state_idx)))
+                if cost_current_solution < pbest[i].energy:
+                    pbest[i] = Swarm[i].deepcopy()  # copy of the pbest solution
+                    accepts += 1
+                self.update(step, pbest[i].energy, accepts / trials, improves / trials, False)
+                ax.scatter(t, Swarm[i].energy)
+
+                pbest.sort()
+                if pbest[0].energy < gbest.energy:
+                    gbest = pbest[0].deepcopy()
+                    gbest.velocity = pbest[0].velocity.copy()
+                    gbest.update_energy(self.energy(self.getState(gbest.state_idx)))
+                    improves += 1
+                self.update(step, gbest.energy, accepts / trials, improves / trials, True)
+                self.w = self.w - delta_w
+            # trials, accepts, improves = 0, 1, 1
+
+        ax.set(xlabel='Iteration', ylabel='Cost',  title='PSO for TSP')
+        plt.show()
+
+        self.gbest = gbest.deepcopy()
+        if self.save_state_on_exit:
+            self.save_state()
+
+        return self.getState(gbest.state_idx), gbest.energy
+
+
+    def DPSO_Swap(self):
+        self.start = time.time()
+        step, trials, accepts, improves = 0, 0, 0, 0
 
         #length = len(self.distance_matrix) - 1
         length = self.nNodes - 1
@@ -286,10 +357,11 @@ class DPSO_Optimizer(object):
         # Create random solutions for each particle
         Swarm = []  # a list of State objects
         for i in range(self.size_population):
+            tempVel = []
             state_idx = self.get_random_solution()
-            state = Particle(state_idx, self.energy(self.getStateSTR(state_idx)))
             for N in range(random.randint(0, length)):  # random initial velocities
-                state.velocity.append((random.randint(0, length-1), random.randint(0, length-1), self.w))
+                tempVel.append((random.randint(0, length-1), random.randint(0, length-1), self.w))
+            state = Particle(state_idx, tempVel, self.energy(self.getState(state_idx)))
             Swarm.append(state)
 
         # initialize gbest and pbest
@@ -336,11 +408,11 @@ class DPSO_Optimizer(object):
                         Swarm[i].state_idx[swap_operator[1]] = aux
 
                 # gets cost of the current solution
-                Swarm[i].update_energy(self.energy(self.getStateSTR(Swarm[i].state_idx)))
+                Swarm[i].update_energy(self.energy(self.getState(Swarm[i].state_idx)))
                 cost_current_solution = Swarm[i].energy
 
                 # checks if current solution is pbest solution
-                pbest[i].update_energy(self.energy(self.getStateSTR(pbest[i].state_idx)))
+                pbest[i].update_energy(self.energy(self.getState(pbest[i].state_idx)))
                 if cost_current_solution < pbest[i].energy:
                     pbest[i] = Swarm[i].deepcopy()  # copy of the pbest solution
                     accepts += 1
@@ -348,99 +420,19 @@ class DPSO_Optimizer(object):
 
 
             for i in range(self.size_population):
-                gbest.update_energy(self.energy(self.getStateSTR(gbest.state_idx)))
-                pbest[i].update_energy(self.energy(self.getStateSTR(pbest[i].state_idx)))
+                gbest.update_energy(self.energy(self.getState(gbest.state_idx)))
+                pbest[i].update_energy(self.energy(self.getState(pbest[i].state_idx)))
                 if pbest[i].energy < gbest.energy:
                     gbest = pbest[i].deepcopy()  # copy of the pbest solution
-                    gbest.update_energy(self.energy(self.getStateSTR(gbest.state_idx)))
+                    gbest.update_energy(self.energy(self.getState(gbest.state_idx)))
                     improves += 1
                 self.update(step, gbest.energy, accepts / trials, improves / trials, True)
-                print("   -->  gbest.state_idx = ", gbest.state_idx)
 
             trials, accepts, improves = 0, 1, 1
-            #self.state = self.getStateSTR(gbest.state_idx)
-        print("   -->  gbest.state_idx = ", gbest.state_idx)
 
-        return self.getStateSTR(gbest.state_idx), gbest.energy
+        self.gbest = gbest.deepcopy()
+        if self.save_state_on_exit:
+            self.save_state()
 
-    def DPSO_II(self):
 
-        self.start = time.time()
-        step, trials, accepts, improves = 0, 0, 0, 0
-        length = self.nNodes - 1
-        # fig, ax = plt.subplots()
-        # ax.grid()
-
-        # Create random solutions for each particle
-        Swarm = []  # a list of State objects
-        for i in range(self.size_population):
-            state_idx = self.get_random_solution()
-            state = Particle(state_idx, self.energy(self.getStateSTR(state_idx)))
-            state.velocity = [0] * (length + 1)
-            Swarm.append(state)
-
-        # initialize gbest and pbest
-        Swarm.sort()
-        gbest = Swarm[0].deepcopy()  # best solution (MIN)
-        pbest = Swarm
-        self.update(step, gbest.energy, None, None)
-
-        delta_w = (self.w - 0.4) / (self.maxIterations - 1)
-
-        # RUNNING THE ALGORITHM:
-        # for each time step (iteration)
-        for t in range(self.maxIterations):
-            step += 1
-            # for each particle in the swarm
-            # each particle is an object of State
-            for i in range(self.size_population):
-                trials += 1
-                # temp_velocity = Swarm[i].velocity
-                previous_route = np.array(Swarm[i].state_idx)
-
-                # print(" w = {0}".format(w))
-                inertia = self.w * np.array(Swarm[i].velocity)
-                personal = self.c1 * np.random.uniform(0, 1) * (np.array(pbest[i].state_idx) - previous_route)
-                social = self.c2 * np.random.uniform(0, 1) * (np.array(gbest.state_idx) - previous_route)
-
-                new_velocity = inertia + personal + social
-
-                temp_route = np.add(previous_route, new_velocity)
-                _, _, new_route = np.unique(temp_route, return_index=True, return_inverse=True, return_counts=False)
-
-                Swarm[i].velocity = new_velocity.tolist()
-                Swarm[i].state_idx = new_route.tolist()
-
-                # gets cost of the current solution
-                Swarm[i].update_energy(self.energy(self.getStateSTR(Swarm[i].state_idx)))
-                cost_current_solution = Swarm[i].energy
-
-                # checks if current solution is pbest solution
-                pbest[i].update_energy(self.energy(self.getStateSTR(pbest[i].state_idx)))
-                if cost_current_solution < pbest[i].energy:
-                    pbest[i] = Swarm[i].deepcopy()  # copy of the pbest solution
-                    accepts += 1
-                self.update(step, pbest[i].energy, accepts / trials, improves / trials, False)
-                # ax.scatter(t, pbest[i].distance)
-
-                pbest.sort()
-                if pbest[0].energy < gbest.energy:
-                    gbest = pbest[0].deepcopy()
-                    gbest.velocity = pbest[0].velocity.copy()
-                    gbest.update_energy(self.energy(self.getStateSTR(gbest.state_idx)))
-                    improves += 1
-                self.update(step, gbest.energy, accepts / trials, improves / trials, True)
-                # print("   -->  gbest.state_idx = ", gbest.state_idx)
-                # print('\ngbest = {0} miles'.format(gbest.distance))
-
-                self.w = self.w - delta_w
-
-                # ax.set(xlabel='Iteration', ylabel='Cost (miles)',
-                #        title='PSO for TSP')
-                # plt.show()
-
-            trials, accepts, improves = 0, 1, 1
-            # self.state = self.getStateSTR(gbest.state_idx)
-        #print("   -->  gbest.state_idx = ", gbest.state_idx)
-
-        return self.getStateSTR(gbest.state_idx), gbest.energy
+        return self.getState(gbest.state_idx), gbest.energy

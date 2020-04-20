@@ -2,13 +2,13 @@
 # from restorationmodel import RestorationModel
 # from ToolBox import *
 # from joblib import Parallel, delayed
-from DiscretePSO import DPSO_Optimizer
+from DiscretePSO import DPSO
 
 import numpy as np
 import random
 import csv
 
-class My_DPSO_Interface(DPSO_Optimizer):
+class My_PSO_Interface(DPSO.DPSO_Optimizer):
     """
         Interface to use simaneal package and its classes
 
@@ -55,7 +55,7 @@ class My_DPSO_Interface(DPSO_Optimizer):
         self.restoration_types = list(self.restoration_names.keys())
 
         # it inherits the __init__ method of the anneal class in simanneal package
-        super(My_DPSO_Interface, self).__init__(state, graph, od_graph, od_matrix, graph_damaged, damage, fdir=self.fdir)  # important!
+        super(My_PSO_Interface, self).__init__(state, graph, od_graph, od_matrix, graph_damaged, damage, fdir=self.fdir)  # important!
 
     def move(self):
         """Swaps two object in the restoration schedual."""

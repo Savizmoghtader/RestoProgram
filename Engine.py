@@ -3,7 +3,8 @@ from restorationmodel import RestorationModel
 from traffic_fw.trafficmodel import TrafficModel
 from traffic_fw.initialize import *
 from SimAnneal_Interface import SimAnnealInterface
-from PSO_Interface import My_DPSO_Interface
+from PSO_Interface import My_PSO_Interface
+from Swarm_Interface import Swarm_Interface
 
 import random
 import ast
@@ -252,10 +253,17 @@ class Engine(object):
 
 
         ######################## PSO OPTIMIZATION ##########################
-        optimize = My_DPSO_Interface(init_state, self.graph, self.od_graph,
-                               self.od_matrix, self.graph_damaged, damage, self.output_directory)
+        # optimize = My_PSO_Interface(init_state, self.graph, self.od_graph,
+        #                        self.od_matrix, self.graph_damaged, damage, self.output_directory)
+        # optimize.copy_strategy = "slice"
+        # state, e = optimize.DPSO()
+        ###################################################################
+
+        ##################### PSO OPTIMIZATION - SWARM ####################
+        optimize = Swarm_Interface(init_state, self.graph, self.od_graph,
+                              self.od_matrix, self.graph_damaged, damage, self.output_directory)
         optimize.copy_strategy = "slice"
-        state, e = optimize.DPSO_II()
+        state, e = optimize.DPSO()
         ###################################################################
 
         ###################### SIMANNEAL OPTIMIZATION ######################
