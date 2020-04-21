@@ -1,0 +1,28 @@
+How to move a Python Project to another computer? 
+
+1) Create list of packages installed on the first machine and put it in the project folder:
+	$ pip freeze > requirements.txt
+	
+2) Move or git clone project to the second machine
+
+3) Upgrade pip on the second machine:
+	$ python3 -m pip install --upgrade pip
+	or
+	$[sudo -H] pip3 install --upgrade pip
+	
+4) install virtual environment package using:
+	$ pip3 install virtualenv
+	
+5) In order to avoid conflict with already installed packages, create a virtual environment for this project:
+
+	$ cd project_folder
+	$ virtualenv venv
+	
+6) Activate the virtual environment:
+	
+	Windows: D:\Project>  venv\Scripts\activate
+	Linux: $ source venv/bin/activate
+	
+7) go on the main project folder and install packages:
+	$ pip3 install -r requirements.txt
+	
