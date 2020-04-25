@@ -87,11 +87,11 @@ class SwarmOptimizer(object):
     __metaclass__ = abc.ABCMeta
 
     n_random = 4
-    size_population = 2
+    size_population = 4
     nswarm = 2
     c1 = 1.5  # Individual coeff
     c2 = 1.3  # Social coeff
-    maxIterations = 10
+    maxIterations = 20
     w = 0.9  # Inertial Coeff
 
     copy_strategy = 'deepcopy'
@@ -250,6 +250,8 @@ class SwarmOptimizer(object):
         ax.grid()
 
         delta_w = (self.w - 0.4) / (self.maxIterations - 1)
+        r1 = np.random.uniform(0, 1)
+        r2 = np.random.uniform(0, 1)
 
         # for each time step iteration
         for t in range(self.maxIterations):
@@ -260,8 +262,8 @@ class SwarmOptimizer(object):
 
                 previous_route = np.array(self.solutions[i].state_idx)
                 inertia = self.w * np.array(self.solutions[i].velocity)
-                personal = self.c1 * np.random.uniform(0, 1) * (np.array(self.pbest[i].state_idx) - previous_route)
-                social = self.c2 * np.random.uniform(0, 1) * (np.array(self.gbest.state_idx) - previous_route)
+                personal = self.c1 * r1 * (np.array(self.pbest[i].state_idx) - previous_route)
+                social = self.c2 * r2 * (np.array(self.gbest.state_idx) - previous_route)
 
                 new_velocity = inertia + personal + social
 
