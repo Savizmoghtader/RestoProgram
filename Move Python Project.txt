@@ -25,4 +25,38 @@ How to move a Python Project to another computer?
 	
 7) go on the main project folder and install packages:
 	$ pip3 install -r requirements.txt
-	
+
+
+GDAL
+Linux
+GDAL binary and Python binding are available through ubuntugis repository
+
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+
+sudo apt-get install gdal-bin
+
+sudo apt-get install python3-gdal
+
+sudo apt-get install python3-numpy
+
+Install Blender from a repository instead of ready to use tarballs from blender.org.
+
+sudo add-apt-repository ppa:thomas-schiex/blender
+
+Installing through this way, Blender will use the version of Python existing on the system instead of it's own bundle version.
+
+Warning : Currently, Numpy will fails if your distribution does not support Python 3.6. It can be solved by reinstalling Numpy with pip :
+
+sudo apt-get install python-pip python3-pip
+
+sudo pip3 install -U numpy
+
+
+https://mothergeo-py.readthedocs.io/en/latest/development/how-to/gdal-ubuntu-pkg.html
+https://github.com/domlysz/BlenderGIS/wiki/How-to-install-GDAL
+
+
+or possibly clone git repo:
+https://gdal.org/download.html#past-releases
+
+

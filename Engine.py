@@ -259,19 +259,19 @@ class Engine(object):
         # state, e = optimize.DPSO()
         ###################################################################
 
-        ##################### PSO OPTIMIZATION - SWARM ####################
-        optimize = Swarm_Interface(init_state, self.graph, self.od_graph,
-                              self.od_matrix, self.graph_damaged, damage, self.output_directory)
-        optimize.copy_strategy = "slice"
-        state, e = optimize.DPSO()
-        ###################################################################
-
-        ###################### SIMANNEAL OPTIMIZATION ######################
-        # optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
-        #                        self.od_matrix, self.graph_damaged, damage, self.output_directory)        #
+        # ##################### PSO OPTIMIZATION - SWARM ####################
+        # optimize = Swarm_Interface(init_state, self.graph, self.od_graph,
+        #                       self.od_matrix, self.graph_damaged, damage, self.output_directory)
         # optimize.copy_strategy = "slice"
-        # state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
-        ###################################################################
+        # state, e = optimize.DPSO()
+        # ###################################################################
+
+        ##################### SIMANNEAL OPTIMIZATION ######################
+        optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
+                               self.od_matrix, self.graph_damaged, damage, self.output_directory)        #
+        optimize.copy_strategy = "slice"
+        state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
+        ##################################################################
 
         print("consequences: %i" % e)
 
