@@ -11,6 +11,11 @@ import signal
 import pickle
 import datetime
 import abc
+import numpy as np
+import random
+import operator
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def round_figures(x, n):
@@ -26,18 +31,19 @@ def time_string(seconds):
     return '%4i:%02i:%02i' % (h, m, s)
 
 
+
 class GeneticAlgorithm(object):
 
-    """Performs simulated annealing by calling functions to calculate
-    energy and make moves on a state.  The temperature schedule for
-    annealing may be provided manually or estimated automatically.
+    """Performs GA by calling functions to calculate
+    energy and make moves on a state.
     """
-
     __metaclass__ = abc.ABCMeta
-    Tmax = 2500.0
-    Tmin = 2.5
-    steps = 10
-    updates = 100
+
+    popSize = 100
+    eliteSize = 4
+    mutationRate = 0.01
+    generations = 100
+
     copy_strategy = 'deepcopy'
     user_exit = False
     save_state_on_exit = True
@@ -54,6 +60,143 @@ class GeneticAlgorithm(object):
 
         signal.signal(signal.SIGINT, self.set_user_exit)
         self.fdir = fdir
+
+
+    def createRoute(self, state):
+        route = random.sample(state, len(state)) #E.g. list1 = [1, 2, 3, 4, 5] /print(sample(list1,3)) = [2, 3, 5]
+        return route
+
+
+    def initialPopulation(self, popSize):
+        population = []
+
+        for i in range(0, popSize):
+            population.append(self.createRoute(self.state))
+        return population
+
+
+    def rankRoutes(self, population):
+        fitnessResults = {}
+        energy = [10541, 10442, 75634754, 10644, 135364, 105634, 2434245, 105348, 156409, 1054400, 1054541, 1012442, 7356754, 1062444, 13564, 1056, 243445, 10258, 154609, 112000]
+        for i in range(0,len(population)):
+            fitnessResults[i] = energy[i]
+        popRanked = sorted(fitnessResults.items(), key = operator.itemgetter(1), reverse = False)
+        return popRanked # sort a list of tuples on the second key.  The first key is the route
+
+    def selection(self, popRanked, eliteSize):
+        selectionResults = []
+        df = pd.DataFrame(np.array(popRanked), columns=["Index", "Fitness"])
+        df['cum_sum'] = df.Fitness.cumsum()
+        df['cum_perc'] = 100 * df.cum_sum / df.Fitness.sum()
+
+        # print(df)
+
+        for i in range(0, eliteSize):
+           selectionResults.append(popRanked[i][0])
+        for i in range(0, len(popRanked) - eliteSize):
+            pick = 100 * random.random()
+            for i in range(0, len(popRanked)):
+                if pick <= df.iat[i, 3]:
+                    selectionResults.append(popRanked[i][0])
+                    break
+        return selectionResults
+
+
+    def matingPool(self, population, selectionResults):
+        matingpool = []
+        for i in range(0, len(selectionResults)):
+            index = selectionResults[i]
+            matingpool.append(population[index])
+        return matingpool
+
+
+    def breed(self, parent1, parent2):
+        child = []
+        childP1 = []
+        childP2 = []
+
+        geneA = int(random.random() * len(parent1))
+        geneB = int(random.random() * len(parent1))
+
+        startGene = min(geneA, geneB)
+        endGene = max(geneA, geneB)
+
+        for i in range(startGene, endGene):
+            childP1.append(parent1[i])
+
+        childP2 = [item for item in parent2 if item not in childP1] # todo what happens when it is repeated ?
+
+        child = childP1 + childP2
+        return child
+
+
+    def breedPopulation(self, matingpool, eliteSize):
+        children = []
+        length = len(matingpool) - eliteSize
+        pool = random.sample(matingpool, len(matingpool))
+
+        for i in range(0, eliteSize):
+            children.append(matingpool[i])
+
+        for i in range(0, length):
+            child = self.breed(pool[i], pool[len(matingpool) - i - 1])
+            children.append(child)
+        return children
+
+
+    def mutate(self, individual, mutationRate):
+        for swapped in range(len(individual)):
+            if (random.random() < mutationRate):
+                swapWith = int(random.random() * len(individual))
+
+                city1 = individual[swapped]
+                city2 = individual[swapWith]
+
+                individual[swapped] = city2
+                individual[swapWith] = city1
+        return individual
+
+
+    def mutatePopulation(self, population, mutationRate):
+        mutatedPop = []
+
+        for ind in range(0, len(population)):
+            mutatedInd = self.mutate(population[ind], mutationRate)
+            mutatedPop.append(mutatedInd)
+        return mutatedPop
+
+
+    def nextGeneration(self, currentGen, eliteSize, mutationRate):
+        popRanked = self.rankRoutes(currentGen)
+        selectionResults = self.selection(popRanked, eliteSize)
+        matingpool = self.matingPool(currentGen, selectionResults)
+        children = self.breedPopulation(matingpool, eliteSize)
+        nextGeneration = self.mutatePopulation(children, mutationRate)
+        return nextGeneration
+
+
+    # def geneticAlgorithm(self, state, popSize, eliteSize, mutationRate, generations):
+    #     pop = self.initialPopulation(popSize, state)
+    #     print("Initial distance: " + str(1 / self.rankRoutes(pop)[0][1]))
+    #
+    #     progress = []
+    #     progress.append(1 / self.rankRoutes(pop)[0][1])
+    #
+    #     for i in range(0, generations):
+    #         pop = self.nextGeneration(pop, eliteSize, mutationRate)
+    #         progress.append(1 / self.rankRoutes(pop)[0][1])
+    #
+    #     print("Final distance: " + str(1 / self.rankRoutes(pop)[0][1]))
+    #     bestRouteIndex = self.rankRoutes(pop)[0][0]
+    #     bestRoute = pop[bestRouteIndex]
+    #
+    #     plt.plot(progress)
+    #     plt.ylabel('Distance')
+    #     plt.xlabel('Generation')
+    #     plt.show()
+    #
+    #     return bestRoute
+
 
     def save_state(self, fname=None):
         """Saves state"""
@@ -79,13 +222,6 @@ class GeneticAlgorithm(object):
         """
         self.user_exit = True
 
-    def set_schedule(self, schedule):
-        """Takes the output from `auto` and sets the attributes
-        """
-        self.Tmax = schedule['tmax']
-        self.Tmin = schedule['tmin']
-        self.steps = int(schedule['steps'])
-
     def copy_state(self, state):
         """Returns an exact copy of the provided state
         Implemented according to self.copy_strategy, one of
@@ -100,186 +236,3 @@ class GeneticAlgorithm(object):
             return state[:]
         elif self.copy_strategy == 'method':
             return state.copy()
-
-    def update(self, step, T, E, acceptance, improvement):
-        """Prints the current temperature, energy, acceptance rate,
-        improvement rate, elapsed time, and remaining time.
-
-        The acceptance rate indicates the percentage of moves since the last
-        update that were accepted by the Metropolis algorithm.  It includes
-        moves that decreased the energy, moves that left the energy
-        unchanged, and moves that increased the energy yet were reached by
-        thermal excitation.
-
-        The improvement rate indicates the percentage of moves since the
-        last update that strictly decreased the energy.  At high
-        temperatures it will include both moves that improved the overall
-        state and moves that simply undid previously accepted moves that
-        increased the energy by thermal excititation.  At low temperatures
-        it will tend toward zero as the moves that can decrease the energy
-        are exhausted and moves that would increase the energy are no longer
-        thermally accessible."""
-
-        elapsed = time.time() - self.start
-        if step == 0:
-            print(' Temperature        Energy    Accept   Improve     Elapsed   Remaining')
-            sys.stdout.write('\r%12.2f  %12.2f                      %s            ' % \
-                (T, E, time_string(elapsed)))
-            sys.stdout.flush()
-            with open(self.fdir+'log.csv','w') as f:
-                f.write('Temperature,Energy,Accept,Improve,Elapsed,Remaining')
-                f.write('\n'+','.join([str(T), str(E), time_string(elapsed)]))
-
-        else:
-            remain = (self.steps - step) * (elapsed / step)
-            sys.stdout.write('\r%12.2f  %12.2f  %7.2f%%  %7.2f%%  %s  %s' % \
-            (T, E, 100.0 * acceptance, 100.0 * improvement,\
-            time_string(elapsed), time_string(remain))),
-            sys.stdout.flush()
-            with open(self.fdir+'log.csv','a') as f:
-                f.write('\n'+','.join([str(T), str(E),str(acceptance),str(improvement),time_string(elapsed), time_string(remain)]))
-
-    def anneal(self):
-        """Minimizes the energy of a system by simulated annealing.
-
-        Parameters
-        state : an initial arrangement of the system
-
-        Returns
-        (state, energy): the best state and energy found.
-        """
-        step = 0
-        self.start = time.time()
-
-        # Precompute factor for exponential cooling from Tmax to Tmin
-        if self.Tmin <= 0.0:
-            raise Exception('Exponential cooling requires a minimum "\
-                "temperature greater than zero.')
-        Tfactor = -math.log(self.Tmax / self.Tmin)
-
-        # Note initial state
-        T = self.Tmax
-        E = self.energy()
-        prevState = self.copy_state(self.state)
-        prevEnergy = E
-        bestState = self.copy_state(self.state)
-        bestEnergy = E
-        trials, accepts, improves = 0, 0, 0
-        if self.updates > 0:
-            updateWavelength = self.steps / self.updates
-            self.update(step, T, E, None, None)
-
-        # Attempt moves to new states
-        while step < self.steps and not self.user_exit:
-            step += 1
-            T = self.Tmax * math.exp(Tfactor * step / self.steps)
-            self.move()
-            E = self.energy()
-            dE = E - prevEnergy
-            trials += 1
-            if dE > 0.0 and math.exp(-dE / T) < random.random():
-                # Restore previous state
-                self.state = self.copy_state(prevState)
-                E = prevEnergy
-            else:
-                # Accept new state and compare to best state
-                accepts += 1
-                if dE < 0.0:
-                    improves += 1
-                prevState = self.copy_state(self.state)
-                prevEnergy = E
-                if E < bestEnergy:
-                    bestState = self.copy_state(self.state)
-                    bestEnergy = E
-            if self.updates > 1:
-                if step // updateWavelength > (step - 1) // updateWavelength:
-                    self.update(
-                        step, T, E, accepts / trials, improves / trials)
-                    trials, accepts, improves = 0, 0, 0
-
-        # line break after progress output
-        print('')
-
-        self.state = self.copy_state(bestState)
-        if self.save_state_on_exit:
-            self.save_state()
-        # Return best state and energy
-        return bestState, bestEnergy
-
-    def auto(self, minutes, steps=2000):
-        """Minimizes the energy of a system by simulated annealing with
-        automatic selection of the temperature schedule.
-
-        Keyword arguments:
-        state -- an initial arrangement of the system
-        minutes -- time to spend annealing (after exploring temperatures)
-        steps -- number of steps to spend on each stage of exploration
-
-        Returns the best state and energy found."""
-
-        def run(T, steps):
-            """Anneals a system at constant temperature and returns the state,
-            energy, rate of acceptance, and rate of improvement."""
-            E = self.energy()
-            prevState = self.copy_state(self.state)
-            prevEnergy = E
-            accepts, improves = 0, 0
-            for step in range(steps):
-                self.move()
-                E = self.energy()
-                dE = E - prevEnergy
-                if dE > 0.0 and math.exp(-dE / T) < random.random():
-                    self.state = self.copy_state(prevState)
-                    E = prevEnergy
-                else:
-                    accepts += 1
-                    if dE < 0.0:
-                        improves += 1
-                    prevState = self.copy_state(self.state)
-                    prevEnergy = E
-            return E, float(accepts) / steps, float(improves) / steps
-
-        step = 0
-        self.start = time.time()
-
-        # Attempting automatic simulated anneal...
-        # Find an initial guess for temperature
-        T = 0.0
-        E = self.energy()
-        self.update(step, T, E, None, None)
-        while T == 0.0:
-            step += 1
-            self.move()
-            T = abs(self.energy() - E)
-
-        # Search for Tmax - a temperature that gives 98% acceptance
-        E, acceptance, improvement = run(T, steps)
-
-        step += steps
-        while acceptance > 0.98:
-            T = round_figures(T / 1.5, 2)
-            E, acceptance, improvement = run(T, steps)
-            step += steps
-            self.update(step, T, E, acceptance, improvement)
-        while acceptance < 0.98:
-            T = round_figures(T * 1.5, 2)
-            E, acceptance, improvement = run(T, steps)
-            step += steps
-            self.update(step, T, E, acceptance, improvement)
-        Tmax = T
-
-        # Search for Tmin - a temperature that gives 0% improvement
-        while improvement > 0.0:
-            T = round_figures(T / 1.5, 2)
-            E, acceptance, improvement = run(T, steps)
-            step += steps
-            self.update(step, T, E, acceptance, improvement)
-        Tmin = T
-
-        # Calculate anneal duration
-        elapsed = time.time() - self.start
-        duration = round_figures(int(60.0 * minutes * step / elapsed), 2)
-
-        print('') # New line after auto() output
-        # Don't perform anneal, just return params
-        return {'tmax': Tmax, 'tmin': Tmin, 'steps': duration}

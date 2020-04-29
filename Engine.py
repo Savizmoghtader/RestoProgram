@@ -5,6 +5,7 @@ from traffic_fw.initialize import *
 from SimAnneal_Interface import SimAnnealInterface
 from PSO_Interface import My_PSO_Interface
 from Swarm_Interface import Swarm_Interface
+from DGA_Interface import GAInterface
 
 import random
 import ast
@@ -268,10 +269,19 @@ class Engine(object):
 
         ##################### SIMANNEAL OPTIMIZATION ######################
         optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
-                               self.od_matrix, self.graph_damaged, damage, self.output_directory)        #
+                               self.od_matrix, self.graph_damaged, damage, self.output_directory)
         optimize.copy_strategy = "slice"
         state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
         ##################################################################
+
+        # #######################  GENETIC ALGORITHM OPTIMIZATION ##################
+        # optimize = GAInterface(init_state, self.graph, self.od_graph,
+        #                               self.od_matrix, self.graph_damaged, damage, self.output_directory)
+        # optimize.copy_strategy = "slice"
+        # state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
+        #
+        # #############################################################################
+
 
         print("consequences: %i" % e)
 

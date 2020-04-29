@@ -1,4 +1,3 @@
-from simanneal import Annealer
 from restorationmodel import RestorationModel
 from ToolBox import *
 from joblib import Parallel, delayed
