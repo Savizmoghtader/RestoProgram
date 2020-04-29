@@ -8,7 +8,7 @@ if __name__ == '__main__':
     print('***** start the simulation *****')
     start = timeit.default_timer()
     resultDir = './Testresults_4PSO_12/'
-    model = Engine(resultDir, bTest=False, bRestConstraint=False)
+    model = Engine(resultDir, bTest=True, bRestConstraint=False)
     model.run()
     # ppmodel = PpEngine(resultDir, bTest=False)
     # ppmodel.run('3')

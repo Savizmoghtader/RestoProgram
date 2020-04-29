@@ -54,16 +54,7 @@ class Swarm_Interface(Swarm.SwarmOptimizer):
         super(Swarm_Interface, self).__init__(state, graph, od_graph, od_matrix, graph_damaged, damage, fdir=self.fdir)  # important!
 
     def move(self):
-        """Swaps two object in the restoration schedual."""
-        # random.randint(a, b): Return a random integer N such that a <= N <= b.
-
-        a = random.randint(0, len(self.state) - 1)
-        b = random.randint(0, len(self.state) - 1)
-        self.state[a], self.state[b] = self.state[b], self.state[a]
-
-        # change type of restoration for one state
-        c = random.choice(self.restoration_types)
-        self.state[a] = (self.state[a][0], c)
+        pass
 
     def energy(self):
         """Calculates the length of the route."""
@@ -71,7 +62,14 @@ class Swarm_Interface(Swarm.SwarmOptimizer):
         for i in range(self.size_population):
             e = 0
             restoration = RestorationModel(self.graph_damaged)
-            restoration.run(self.getState(self.solutions[i].state_idx))
+
+            # change type of restoration for one state
+            temp_state = self.getState(self.solutions[i].state_idx)
+            k = random.randint(0, len(temp_state)-1)
+            c = random.choice(self.restoration_types)
+            temp_state[k] = (temp_state[k][0], c)
+
+            restoration.run(temp_state)
             restoration_graphs = restoration.get_restoration_graphs()
             restoration_times = restoration.get_restoration_times()
             restoration_costs = restoration.get_restoration_costs()
