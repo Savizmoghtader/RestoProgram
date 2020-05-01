@@ -83,14 +83,12 @@ def selection(popRanked, eliteSize):
                 break
     return selectionResults
 
-
 def matingPool(population, selectionResults):
     matingpool = []
     for i in range(0, len(selectionResults)):
         index = selectionResults[i]
         matingpool.append(population[index])
     return matingpool
-
 
 def breed(parent1, parent2):
     child = []
@@ -147,7 +145,6 @@ def mutatePopulation(population, mutationRate):
         mutatedPop.append(mutatedInd)
     return mutatedPop
 
-
 def nextGeneration(currentGen, eliteSize, mutationRate):
     popRanked = rankRoutes(currentGen)
     selectionResults = selection(popRanked, eliteSize)
@@ -155,7 +152,6 @@ def nextGeneration(currentGen, eliteSize, mutationRate):
     children = breedPopulation(matingpool, eliteSize)
     nextGeneration = mutatePopulation(children, mutationRate)
     return nextGeneration
-
 
 def geneticAlgorithm(state, popSize, eliteSize, mutationRate, generations):
     pop = initialPopulation(popSize, state)

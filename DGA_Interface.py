@@ -61,30 +61,32 @@ class GAInterface(DGA.GeneticAlgorithm):
 
     def energy(self):
         """Calculates the costs of the restoration."""
-        e = 0
+        popEnergy = []
+        for i in range(len(self.population)):
+            e = 0
+            restoration = RestorationModel(self.graph_damaged)
+            restoration.run(self.population[i])
+            restoration_graphs = restoration.get_restoration_graphs()
+            restoration_times = restoration.get_restoration_times()
+            restoration_costs = restoration.get_restoration_costs()
+            damaged = []
+            damaged.append(get_delta(self.no_damage, self.initial_damage))
 
-        restoration = RestorationModel(self.graph_damaged)
-        restoration.run(self.state)
-        restoration_graphs = restoration.get_restoration_graphs()
-        restoration_times = restoration.get_restoration_times()
-        restoration_costs = restoration.get_restoration_costs()
+            sim_results = Parallel(n_jobs=-1)(delayed(parallel_model)(
+                graph, self.od_graph, self.od_matrix) for graph in restoration_graphs[:-1])
+            for values in sim_results:
+                damaged.append(get_delta(self.no_damage, values))
 
-        damaged = []
-        damaged.append(get_delta(self.no_damage, self.initial_damage))
+            for idx, values in enumerate(damaged):
+                dt = restoration_times[idx] if idx == 0 else restoration_times[idx] - \
+                    restoration_times[idx-1]
+                e += sum(restoration_costs[idx]) + dt * (self.day_factor * values[2] * np.sum(self.mu*self.xi) +
+                                                         values[3] * np.sum(self.mu * (self.nu * self.F_w + self.rho)) + values[4] * self.upsilon)
+            popEnergy.append(e)
 
-        sim_results = Parallel(n_jobs=4)(delayed(parallel_model)(
-            graph, self.od_graph, self.od_matrix) for graph in restoration_graphs[:-1])
-        for values in sim_results:
-            damaged.append(get_delta(self.no_damage, values))
-
-        for idx, values in enumerate(damaged):
-            dt = restoration_times[idx] if idx == 0 else restoration_times[idx] - \
-                restoration_times[idx-1]
-            e += sum(restoration_costs[idx]) + dt * (self.day_factor * values[2] * np.sum(self.mu*self.xi) +
-                                                     values[3] * np.sum(self.mu * (self.nu * self.F_w + self.rho)) + values[4] * self.upsilon)
-        with open(self.fdir+'energy.csv', 'a') as f:
-            f.write('\n'+str(e))
-
+        # pEnergyOut = popEnergy.copy()
+        # pEnergyOut.sort()
+        # with open(self.fdir+'energy.csv', 'a') as f:
+        #         f.write('\n'+str(pEnergyOut[0]))
         #print("SA Energy Functions is Uesd ....")
-
-        return e
+        return popEnergy

@@ -267,20 +267,20 @@ class Engine(object):
         # state, e = optimize.DPSO()
         # ###################################################################
 
-        ##################### SIMANNEAL OPTIMIZATION ######################
-        optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
-                               self.od_matrix, self.graph_damaged, damage, self.output_directory)
-        optimize.copy_strategy = "slice"
-        state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
-        ##################################################################
-
-        # #######################  GENETIC ALGORITHM OPTIMIZATION ##################
-        # optimize = GAInterface(init_state, self.graph, self.od_graph,
-        #                               self.od_matrix, self.graph_damaged, damage, self.output_directory)
+        # ##################### SIMANNEAL OPTIMIZATION ######################
+        # optimize = SimAnnealInterface(init_state, self.graph, self.od_graph,
+        #                        self.od_matrix, self.graph_damaged, damage, self.output_directory)
         # optimize.copy_strategy = "slice"
         # state, e = optimize.anneal()  # Minimizes the energy of a system by simulated annealing
-        #
-        # #############################################################################
+        # ##################################################################
+
+        #######################  GENETIC ALGORITHM OPTIMIZATION ##################
+        optimize = GAInterface(init_state, self.graph, self.od_graph,
+                                      self.od_matrix, self.graph_damaged, damage, self.output_directory)
+        optimize.copy_strategy = "slice"
+        state, e = optimize.run()  # Minimizes the energy of a system by GA
+
+        #############################################################################
 
 
         print("consequences: %i" % e)

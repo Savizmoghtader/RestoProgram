@@ -71,7 +71,13 @@ class Swarm_Interface(Swarm.SwarmOptimizer):
         for i in range(self.size_population):
             e = 0
             restoration = RestorationModel(self.graph_damaged)
-            restoration.run(self.getState(self.solutions[i].state_idx))
+
+            # change type of restoration for one state
+            temp_state = self.getState(self.solutions[i].state_idx)
+            k = random.randint(0, len(temp_state)-1)
+            c = random.choice(self.restoration_types)
+            temp_state[k] = (temp_state[k][0], c)
+            restoration.run(temp_state)
             restoration_graphs = restoration.get_restoration_graphs()
             restoration_times = restoration.get_restoration_times()
             restoration_costs = restoration.get_restoration_costs()
