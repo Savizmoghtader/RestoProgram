@@ -54,7 +54,6 @@ class GeneticAlgorithm(object):
 
         self.popEnergy = []
 
-
     def createRoute(self):
         route = random.sample(self.state, len(self.state)) #E.g. list1 = [1, 2, 3, 4, 5] /print(sample(list1,3)) = [2, 3, 5]
         return route
@@ -225,3 +224,7 @@ class GeneticAlgorithm(object):
         h, s = divmod(s, 3600)   # get hours and remainder
         m, s = divmod(s, 60)     # split remainder into minutes and seconds
         return '%4i:%02i:%02i' % (h, m, s)
+
+
+
+

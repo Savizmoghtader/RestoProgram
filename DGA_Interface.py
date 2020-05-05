@@ -65,12 +65,20 @@ class GAInterface(DGA.GeneticAlgorithm):
         for i in range(len(self.population)):
             e = 0
             restoration = RestorationModel(self.graph_damaged)
-            restoration.run(self.population[i])
+
+            # change type of restoration for one state
+            temp_state = self.population[i]
+            k = random.randint(0, len(temp_state) - 1)
+            c = random.choice(self.restoration_types)
+            temp_state[k] = (temp_state[k][0], c)
+
+            restoration.run(temp_state)
             restoration_graphs = restoration.get_restoration_graphs()
             restoration_times = restoration.get_restoration_times()
             restoration_costs = restoration.get_restoration_costs()
             damaged = []
             damaged.append(get_delta(self.no_damage, self.initial_damage))
+
 
             sim_results = Parallel(n_jobs=-1)(delayed(parallel_model)(
                 graph, self.od_graph, self.od_matrix) for graph in restoration_graphs[:-1])
