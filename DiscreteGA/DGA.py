@@ -25,10 +25,10 @@ class GeneticAlgorithm(object):
     """
     __metaclass__ = abc.ABCMeta
 
-    popSize = 4
-    eliteSize = 1
+    popSize = 50
+    eliteSize = 5
     mutationRate = 0.01
-    generations = 3
+    generations = 100
 
     copy_strategy = 'deepcopy'
     user_exit = False

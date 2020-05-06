@@ -7,8 +7,8 @@ from PP_Engine import PpEngine
 if __name__ == '__main__':
     print('***** start the simulation *****')
     start = timeit.default_timer()
-    resultDir = './Testresults_DGA_01/'
-    model = Engine(resultDir, bTest=True, bRestConstraint=False)
+    resultDir = './Results_DGA_01/'
+    model = Engine(resultDir, bTest=False, bRestConstraint=False)
     model.run()
     # ppmodel = PpEngine(resultDir, bTest=False)
     # ppmodel.run('3')
