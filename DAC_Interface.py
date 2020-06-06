@@ -1,13 +1,13 @@
 from restorationmodel import RestorationModel
 from ToolBox import *
 from joblib import Parallel, delayed
-from DiscreteGA import DGA
+from DiscreteAC import DAC
 
 import numpy as np
 import random
 import csv
 
-class GAInterface(DGA.GeneticAlgorithm):
+class ACInterface(DAC.AntColony):
 
 
     def __init__(self, state, graph, od_graph, od_matrix, graph_damaged, damage, fdir):
@@ -45,7 +45,7 @@ class GAInterface(DGA.GeneticAlgorithm):
         self.restoration_types = list(self.restoration_names.keys())
 
         # it inherits the __init__ method of the DGA
-        super(GAInterface, self).__init__(state, fdir=self.fdir)  # important!
+        super(ACInterface, self).__init__(state, fdir=self.fdir)  # important!
 
     def move(self):
         """Swaps two object in the restoration schedual."""
